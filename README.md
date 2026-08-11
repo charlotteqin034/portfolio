@@ -9,12 +9,15 @@ No build step, no dependencies. Plain HTML, CSS and ES5 JavaScript.
 ## Run it
 
 ```bash
-python3 -m http.server 4444
-# http://127.0.0.1:4444
+python3 tools/serve.py       # http://127.0.0.1:4444
 ```
 
+Use this rather than `python3 -m http.server`: it sends `Cache-Control:
+no-store`, so an edit always shows up on reload. Plain `http.server` sends no
+cache headers at all and browsers will happily serve you a stale page.
+
 Opening `index.html` straight off disk works too — everything is same-origin
-and there are no ES modules.
+and there are no ES modules — but then you are back to fighting the cache.
 
 ## Where things live
 

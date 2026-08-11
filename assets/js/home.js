@@ -21,7 +21,10 @@
   function fitHeroTitle() {
     if (!heroTitle) return;
     heroTitle.style.fontSize = '';
-    var host = heroTitle.parentElement;
+    // measure against the section, not the parent — the parent is sized by the
+    // headline itself, so it can never report an overflow
+    var host = document.getElementById('hero');
+    if (!host) return;
     var cs = window.getComputedStyle(host);
     var avail = host.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
     // the lines are nowrap blocks, so the h1 itself measures the widest line

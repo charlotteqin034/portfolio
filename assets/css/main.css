@@ -354,6 +354,14 @@ a { color: inherit; }
   perspective-origin: 50% 42%;
 }
 
+/* Sized by the headline (its widest child) and centred, so the whole block
+   floats in the middle of the page while its lines stay left-aligned. */
+.hero__inner {
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
 .hero__stage {
   position: relative;
   will-change: transform, opacity;
