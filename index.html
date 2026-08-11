@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Charlotte — Portfolio</title>
+<meta name="description" content="Portfolio of Charlotte — selected projects.">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%2307040e'/><rect x='3' y='3' width='6' height='6' fill='%23ff5ea8'/><rect x='8' y='8' width='5' height='5' fill='none' stroke='%23fff' stroke-width='1.5'/></svg>">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="topbar__left">
+    <span class="mark" aria-hidden="true"></span>
+    <button type="button" id="menuBtn" class="menu-btn" aria-expanded="false" aria-controls="sidebar">
+      <span class="menu-btn__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="menu-btn__label">Menu</span>
+      <span class="sr-only">Open project index</span>
+    </button>
+  </div>
+  <!-- EDIT ME: location line -->
+  <div class="topbar__right">
+    <span class="topbar__place">Based in ___</span>
+    <span class="topbar__time" id="clock">--:--</span>
+  </div>
+</header>
+
+<div class="sidebar-scrim" id="scrim"></div>
+<aside class="sidebar" id="sidebar" aria-hidden="true" aria-label="Project index"></aside>
+
+<main id="top">
+
+  <!-- ============ hero ============ -->
+  <section class="hero" id="hero">
+    <div class="hero__stage">
+      <!-- Swap portrait.png for your own photo, same filename or update the src.
+           The CSS greyscales it and lays a purple tint over the top. -->
+      <figure class="hero__portrait">
+        <img src="assets/img/portrait.png" width="140" height="184" alt="" aria-hidden="true">
+      </figure>
+
+      <div class="hero__tag" aria-hidden="true">
+        <span class="hero__cursor"></span>
+        <span class="hero__chip">charlotte</span>
+      </div>
+
+      <!-- EDIT ME: hero headline -->
+      <h1 class="hero__title">
+        <span>Hi there</span>
+        <span>I am Charlotte<b class="dot"></b></span>
+      </h1>
+    </div>
+
+    <!-- EDIT ME: the two lines under the headline -->
+    <div class="hero__meta">
+      <div>Building things since <b>2023</b></div>
+      <div>Currently, <b>a placeholder role</b> at <a href="#">Placeholder</a> &#8599;</div>
+    </div>
+
+    <div class="hero__hint" aria-hidden="true">
+      <span>Scroll</span>
+      <i></i>
+    </div>
+  </section>
+
+  <!-- ============ corridor: cards fly toward you ============ -->
+  <section class="corridor" id="corridor" aria-label="Selected projects">
+    <div class="corridor__viewport">
+      <div class="corridor__scene" id="scene"></div>
+    </div>
+  </section>
+
+  <!-- ============ outro ============ -->
+  <section class="outro" id="outro">
+    <span class="outro__eyebrow">End of the line</span>
+    <h2 class="outro__title">Find me here<b class="dot"></b></h2>
+    <div class="outro__links" id="outroLinks"></div>
+    <div class="outro__foot">
+      <span>&copy; <span id="year">2026</span> Charlotte</span>
+      <a href="#top">Back to top <span class="ico" aria-hidden="true">&#8593;</span></a>
+    </div>
+  </section>
+
+</main>
+
+<noscript>
+  <p style="padding:120px 6vw;font-family:'Courier New',monospace;color:#9a90b2">
+    This portfolio uses JavaScript to lay out the project corridor.
+    Enable it, or reach me through the links in the footer.
+  </p>
+</noscript>
+
+<script src="assets/js/site.js"></script>
+<script src="assets/js/nav.js"></script>
+<script src="assets/js/home.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project — Charlotte</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/project.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%2307040e'/><rect x='3' y='3' width='6' height='6' fill='%23ff5ea8'/><rect x='8' y='8' width='5' height='5' fill='none' stroke='%23fff' stroke-width='1.5'/></svg>">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="topbar__left">
+    <a class="mark" href="index.html" aria-label="Home"></a>
+    <button type="button" id="menuBtn" class="menu-btn" aria-expanded="false" aria-controls="sidebar">
+      <span class="menu-btn__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="menu-btn__label">Menu</span>
+      <span class="sr-only">Open project index</span>
+    </button>
+  </div>
+  <div class="topbar__right">
+    <span class="topbar__place">Based in ___</span>
+    <span class="topbar__time" id="clock">--:--</span>
+  </div>
+</header>
+
+<div class="sidebar-scrim" id="scrim"></div>
+<aside class="sidebar" id="sidebar" aria-hidden="true" aria-label="Project index"></aside>
+
+<main>
+  <article class="proj" id="proj"></article>
+</main>
+
+<noscript>
+  <p style="padding:120px 6vw;font-family:'Courier New',monospace;color:#9a90b2">
+    This page needs JavaScript to load its project. Head back to the
+    <a href="index.html" style="color:#b06bff">index</a>.
+  </p>
+</noscript>
+
+<script src="assets/js/site.js"></script>
+<script src="assets/js/project.js"></script>
+<script src="assets/js/nav.js"></script>
+</body>
+</html>
