@@ -6,11 +6,11 @@
 window.SITE = {
   name: 'Charlotte',
 
-  // Drop your real URLs in here — the footer and the sidebar both read them.
+  // The footer and the sidebar both read these.
   // Leave a string empty and it renders as a muted "coming soon" placeholder.
   links: {
-    linkedin: '',
-    github: ''
+    linkedin: 'https://www.linkedin.com/in/charlotte-qin-96757320a/',
+    github: 'https://github.com/charlotteqin034'
   }
 };
 

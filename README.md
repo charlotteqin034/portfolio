@@ -1,8 +1,8 @@
 # pixel-portfolio
 
-A dark, purple-tinged portfolio with a pixel display face. Scrolling walks a
-virtual camera down a corridor; project cards arrive one at a time from the far
-end, staggered left and right, and sweep past you.
+A dark, purple-tinged portfolio with a pixel display face. The homepage is type
+only. Scrolling walks a virtual camera down a corridor; project cards arrive one
+at a time from the far end, staggered left and right, and sweep past you.
 
 No build step, no dependencies. Plain HTML, CSS and ES5 JavaScript.
 
@@ -22,8 +22,8 @@ and there are no ES modules.
 | --- | --- |
 | Projects (all of them) | `assets/js/site.js` → `window.PROJECTS` |
 | LinkedIn / GitHub URLs | `assets/js/site.js` → `SITE.links` |
-| Hero headline, "Based in ___", the two lines under the hero | `index.html`, marked `EDIT ME` |
-| Hero photo | `assets/img/portrait.png` |
+| Hero headline and the two lines under it | `index.html`, marked `EDIT ME` |
+| "Based in …" | the top bar in `index.html` **and** `project.html` |
 | Colours, type scale, card size | `assets/css/main.css` → `:root` |
 | Corridor feel (spacing, speed, fades) | `assets/js/home.js` → `metrics()` |
 
@@ -55,15 +55,6 @@ The card thumbnails are fake app screenshots drawn in code
 (`SiteUtil.thumbSVG`), picked by position and tinted with `accent` — there are
 four layouts. To use a real screenshot instead, swap the `<div class="phone">`
 contents in `home.js` → `cardHTML()` for an `<img>`.
-
-### Swapping the hero photo
-
-Replace `assets/img/portrait.png` with your own (a portrait crop, transparent or
-dark background, works best). The CSS greyscales it and lays a purple duotone
-over the top so it matches whatever you drop in — see `.hero__portrait img`.
-
-The placeholder is generated, not drawn: `python3 tools/make_portrait.py`
-regenerates it if you want to tweak the shape or dithering.
 
 ## Notes
 

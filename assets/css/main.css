@@ -91,7 +91,11 @@ a { color: inherit; }
 }
 
 /* Press Start 2P has no arrow glyphs — anything arrow-shaped borrows VT323 */
-.ico, .outro__arrow { font-family: var(--term); }
+.ico, .outro__arrow {
+  font-family: var(--term);
+  font-size: 1.4em; /* VT323 runs small — match the pixel face it sits next to */
+  line-height: 1;
+}
 
 .dot {
   display: inline-block;
@@ -352,83 +356,12 @@ a { color: inherit; }
 
 .hero__stage {
   position: relative;
-  display: grid;
-  place-items: center;
   will-change: transform, opacity;
   transform-style: preserve-3d;
 }
 
-.hero__portrait {
-  grid-area: 1 / 1;
-  margin: 0;
-  width: min(46vw, 460px);
-  transform: translateY(-19%);
-  position: relative;
-}
-/* a soft purple bloom so the figure separates from the page */
-.hero__portrait::before {
-  content: '';
-  position: absolute;
-  inset: -18% -26% -6%;
-  background: radial-gradient(46% 40% at 50% 52%, rgba(150, 90, 255, 0.16), transparent 72%);
-  pointer-events: none;
-}
-/* darkens the lower half of the figure so the headline stays readable on top */
-.hero__portrait::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 30%, rgba(7, 4, 14, 0.5) 66%, rgba(7, 4, 14, 0.72) 100%);
-  pointer-events: none;
-}
-.hero__portrait img {
-  position: relative;
-  width: 100%;
-  height: auto;
-  image-rendering: pixelated;
-  opacity: 1;
-  /* greyscale → faint purple duotone, so a real photo drops in cleanly */
-  filter: grayscale(1) sepia(1) hue-rotate(228deg) saturate(1.15) brightness(1.02) contrast(1.04);
-  -webkit-mask-image: linear-gradient(180deg, #000 58%, rgba(0, 0, 0, 0.35) 86%, transparent 99%);
-  mask-image: linear-gradient(180deg, #000 58%, rgba(0, 0, 0, 0.35) 86%, transparent 99%);
-}
-
-/* the little multiplayer-cursor tag */
-.hero__tag {
-  grid-area: 1 / 1;
-  align-self: start;
-  justify-self: center;
-  transform: translate(min(20vw, 200px), min(10vh, 74px));
-  display: flex;
-  align-items: flex-start;
-  gap: 2px;
-  animation: bob 5.5s ease-in-out infinite;
-  pointer-events: none;
-}
-.hero__cursor {
-  width: 0; height: 0;
-  border-left: 9px solid var(--pink);
-  border-bottom: 11px solid transparent;
-  transform: rotate(-12deg);
-}
-.hero__chip {
-  font-family: var(--pixel);
-  font-size: 9px;
-  padding: 5px 8px;
-  background: var(--pink);
-  color: #16060e;
-  white-space: nowrap;
-}
-@keyframes bob {
-  0%, 100% { transform: translate(min(20vw, 200px), min(10vh, 74px)); }
-  50%      { transform: translate(min(20vw, 200px), calc(min(10vh, 74px) - 9px)); }
-}
-
 .hero__title {
-  grid-area: 1 / 1;
   margin: 0;
-  justify-self: center;
-  align-self: center;
   font-family: var(--pixel);
   font-size: clamp(15px, 5.3vw, 76px);
   line-height: 1.44;
@@ -708,7 +641,7 @@ a { color: inherit; }
   transition: color 0.22s, border-color 0.22s;
 }
 .outro__link:hover { color: #fff; border-color: var(--pink); }
-.outro__arrow { font-size: 0.9em; transition: transform 0.22s; }
+.outro__arrow { transition: transform 0.22s; }
 .outro__link:hover .outro__arrow { transform: translate(4px, -4px); }
 
 .outro__link.is-empty {
@@ -780,7 +713,6 @@ a { color: inherit; }
 .is-static .card--wide { width: 100%; }
 .is-static .hero__stage,
 .is-static .hero__meta { opacity: 1 !important; transform: none !important; }
-.is-static .hero__tag,
 .is-static .hero__hint i { animation: none; }
 
 /* ============================================================
@@ -819,10 +751,6 @@ a { color: inherit; }
   .card__arrow { top: 18px; right: 18px; font-size: 22px; }
 
   .hero { padding-top: 130px; }
-  .hero__portrait { width: min(58vw, 300px); transform: translateY(-30%); }
-  .hero__portrait::after {
-    background: linear-gradient(180deg, transparent 16%, rgba(7, 4, 14, 0.6) 50%, rgba(7, 4, 14, 0.82) 100%);
-  }
   .hero__meta { font-size: 20px; }
   .topbar__right { font-size: 8px; }
   .menu-btn__label { display: none; }
@@ -830,9 +758,4 @@ a { color: inherit; }
 
 @media (max-width: 520px) {
   body { font-size: 20px; }
-  .hero__tag { transform: translate(min(26vw, 118px), 46px); }
-  @keyframes bob {
-    0%, 100% { transform: translate(min(26vw, 118px), 46px); }
-    50%      { transform: translate(min(26vw, 118px), 37px); }
-  }
 }
