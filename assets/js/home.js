@@ -50,7 +50,9 @@
       p.wide ? ''
       : c && c.frame !== 'phone'
         ? '<div class="card__thumb card__thumb--cover">' +
-            '<img src="' + U.esc(c.src) + '" alt="" loading="lazy">' +
+            '<img class="' + (c.fit === 'contain' ? 'is-contain' : 'is-cover') +
+              (c.focus ? ' is-' + c.focus : '') + '" ' +
+              'src="' + U.esc(c.src) + '" alt="" loading="lazy">' +
           '</div>'
       : '<div class="card__thumb"><div class="phone"><div class="phone__screen">' +
           (c ? '<img class="thumb" src="' + U.esc(c.src) + '" alt="" loading="lazy">'

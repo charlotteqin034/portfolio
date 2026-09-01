@@ -27,8 +27,11 @@ window.SITE = {
    Media is optional and lives in assets/media/<slug>/. `cover` is the image
    that stands for the project on its corridor card; it also leads the gallery
    on the detail page, where `media` follows it. Every entry — cover included —
-   is a path or { src, caption, poster, frame }. frame: 'phone' puts a tall
-   screenshot inside the site's phone mockup instead of a full-bleed panel. */
+   is a path or { src, caption, poster, frame, fit, focus }. frame: 'phone'
+   puts a tall screenshot inside the site's phone mockup instead of a full-bleed
+   panel. On a card cover, fit: 'contain' shows the whole image rather than
+   cropping it to fill, and focus: 'right' (or left/top/bottom/center) picks
+   which edge survives the crop. */
 window.PROJECTS = [
   {
     slug: 'biofeedback-music',
@@ -91,7 +94,7 @@ window.PROJECTS = [
     team: '3 members',
     stack: 'Azure, React.js, Node.js/Express, OpenAI',
     accent: '#7aa2ff',
-    cover: { src: 'assets/media/agents-on-air/live-session.png',
+    cover: { src: 'assets/media/agents-on-air/live-session.png', fit: 'contain',
              caption: 'Nova and Echo mid-episode, with the floor open to listeners.' },
     media: [
       { src: 'assets/media/agents-on-air/demo.mp4',
@@ -118,7 +121,7 @@ window.PROJECTS = [
     team: '3 members',
     stack: 'Arduino, LCD screen, temperature sensor, heater module, servos',
     accent: '#86e06b',
-    cover: { src: 'assets/media/break-to-make/build-table.jpg',
+    cover: { src: 'assets/media/break-to-make/build-table.jpg', focus: 'right',
              caption: 'Wiring the Arduino, somewhere in hour eighteen.' },
     body: [
       'This 24-hour makeathon\'s theme was "Tech for Good," encouraging us to build physical products rather than software. This was one of my first experiences building with hardware coming from a traditional software background, so it gave me the opportunity to explore a new discipline.',
@@ -228,7 +231,13 @@ window.SiteUtil = (function () {
       caption: m.caption || '',
       // a tall phone screenshot belongs in the site's phone mockup; cropping
       // one into a wide panel throws most of the screen away
-      frame: m.frame === 'phone' ? 'phone' : ''
+      frame: m.frame === 'phone' ? 'phone' : '',
+      /* How the card panel treats the image. It crops to fill by default;
+         'contain' shows the whole thing instead. `focus` picks which edge
+         survives the crop. Both are allow-listed rather than passed through,
+         so project copy can never write arbitrary CSS. */
+      fit: m.fit === 'contain' ? 'contain' : 'cover',
+      focus: /^(left|right|top|bottom|center)$/.test(m.focus || '') ? m.focus : ''
     };
   }
 

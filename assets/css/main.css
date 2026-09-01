@@ -526,9 +526,16 @@ a { color: inherit; }
 .card__thumb--cover img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
 }
+.card__thumb--cover img.is-cover { object-fit: cover; }
+/* the whole frame, letterboxed against the card rather than cropped */
+.card__thumb--cover img.is-contain { object-fit: contain; }
+.card__thumb--cover img.is-left { object-position: left center; }
+.card__thumb--cover img.is-right { object-position: right center; }
+.card__thumb--cover img.is-top { object-position: center top; }
+.card__thumb--cover img.is-bottom { object-position: center bottom; }
+.card__thumb--cover img.is-center { object-position: center center; }
 
 .phone {
   width: 172px;
