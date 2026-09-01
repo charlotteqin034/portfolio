@@ -52,8 +52,8 @@
          'style="--accent:' + U.esc(p.accent || '#b06bff') + '">' +
         thumb +
         '<div class="card__body">' +
-          '<span class="card__index">' + U.pad2(i + 1) + ' &mdash; ' + U.esc(p.year || '') + '</span>' +
-          '<h3 class="card__title">' + U.esc(p.title) + '</h3>' +
+          '<span class="card__index">' + U.pad2(i + 1) + ' / ' + U.esc(p.period || '') + '</span>' +
+          '<h3 class="card__title">' + U.esc(U.shortName(p)) + '</h3>' +
           '<p class="card__desc">' + U.esc(p.blurb) + '</p>' +
           '<span class="card__tags">' + tags + '</span>' +
         '</div>' +
@@ -187,8 +187,16 @@
         (it.order < 0 ? -20 : it.side * M.yoff) + 'px,' + z.toFixed(1) + 'px) ' +
         'rotateY(' + (it.side * M.tilt) + 'deg)';
 
-      var live = o > 0.5 && z > -1200 && z < 200;
-      var pe = live ? 'auto' : 'none';
+      /* Clickable for as long as you can actually see it. The old rule also
+         demanded the card be close to the camera, so a card you could plainly
+         read still ignored the cursor at both ends of its run. Letting every
+         visible card take the pointer is safe: hit-testing follows paint
+         order and paint order is depth order, so a far card can never steal a
+         click from a nearer one. The floor keeps the last near-invisible
+         ghost of a card that has already swept past you from catching a
+         stray click, and the section title never takes the pointer at all —
+         it has nothing to click, it would only block the card behind it. */
+      var pe = (it.order >= 0 && o > 0.08) ? 'auto' : 'none';
       if (it.pe !== pe) {
         it.el.style.pointerEvents = pe;
         it.pe = pe;

@@ -49,7 +49,12 @@
   }).join('');
 
   var body = (p.body || []).map(function (par) {
-    return '<p>' + U.esc(par) + '</p>';
+    return '<p>' + U.richText(par) + '</p>';
+  }).join('');
+
+  var links = (p.links || []).map(function (l) {
+    return '<a class="proj__link" href="' + U.esc(l.url) + '" target="_blank" rel="noopener">' +
+      U.esc(l.label) + '<span class="ico" aria-hidden="true">&#8599;</span></a>';
   }).join('');
 
   var highlights = (p.highlights || []).map(function (h) {
@@ -60,8 +65,10 @@
     '<a class="proj__back" href="index.html"><span aria-hidden="true">&#8592;</span> Back to index</a>' +
 
     '<header class="proj__head">' +
-      '<span class="proj__index">' + U.pad2(i + 1) + ' &mdash; ' + U.esc(p.year || '') + '</span>' +
-      '<h1 class="proj__title">' + U.esc(p.title) + '<b class="dot"></b></h1>' +
+      '<span class="proj__index">' + U.pad2(i + 1) + ' / ' + U.esc(p.period || '') + '</span>' +
+      '<h1 class="proj__title">' + U.esc(U.shortName(p)) + '<b class="dot"></b></h1>' +
+      (p.shortTitle && p.shortTitle !== p.title
+        ? '<p class="proj__fullname">' + U.esc(p.title) + '</p>' : '') +
       '<p class="proj__lede">' + U.esc(p.blurb) + '</p>' +
       (tags ? '<div class="proj__tags">' + tags + '</div>' : '') +
     '</header>' +
@@ -71,10 +78,13 @@
     '</div>' +
 
     '<dl class="proj__facts">' +
-      fact('Year', p.year) +
+      fact('Period', p.period) +
       fact('Role', p.role) +
+      fact('Team', p.team) +
       fact('Stack', p.stack) +
     '</dl>' +
+
+    (links ? '<div class="proj__links">' + links + '</div>' : '') +
 
     (body ? '<div class="proj__body">' + body + '</div>' : '') +
 
@@ -84,8 +94,8 @@
 
     '<nav class="proj__nav" aria-label="More projects">' +
       '<a href="' + U.href(prev) + '"><span class="lbl">Previous</span>' +
-        '<span class="nm">' + U.esc(prev.title) + '</span></a>' +
+        '<span class="nm">' + U.esc(U.shortName(prev)) + '</span></a>' +
       '<a href="' + U.href(next) + '"><span class="lbl">Next</span>' +
-        '<span class="nm">' + U.esc(next.title) + '</span></a>' +
+        '<span class="nm">' + U.esc(U.shortName(next)) + '</span></a>' +
     '</nav>';
 })();

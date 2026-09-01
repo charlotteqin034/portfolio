@@ -52,8 +52,19 @@
 }
 .proj__title .dot { -webkit-text-fill-color: initial; background: var(--accent); }
 
+/* The formal project name, kept on the page when the headline shows a short
+   one — it is the thing with the client's name in it. */
+.proj__fullname {
+  margin: 18px 0 0;
+  max-width: 44ch;
+  font-family: var(--term);
+  font-size: 19px;
+  line-height: 1.35;
+  color: var(--muted-2);
+}
+
 .proj__lede {
-  margin: 26px 0 0;
+  margin: 18px 0 0;
   max-width: 44ch;
   font-size: 24px;
   line-height: 1.34;
@@ -121,6 +132,37 @@
   color: var(--text);
 }
 
+/* Anywhere the project actually lives — App Store, demo, repo. */
+.proj__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+.proj__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  font-family: var(--pixel);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  transition: background 0.22s, border-color 0.22s;
+}
+.proj__link:hover {
+  background: var(--panel-2);
+  border-color: var(--accent);
+}
+.proj__link .ico {
+  font-family: var(--term);
+  font-size: 1.5em;
+  line-height: 1;
+  color: var(--accent);
+}
+
 .proj__body {
   margin-top: clamp(46px, 8vh, 78px);
   max-width: 62ch;
@@ -130,6 +172,18 @@
   font-size: 23px;
   line-height: 1.42;
   color: #cec7dd;
+}
+
+/* a paragraph pointing at another project */
+.proj__body a {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.proj__body a:hover {
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .proj__sub {

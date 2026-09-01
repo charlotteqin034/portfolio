@@ -450,12 +450,21 @@ a { color: inherit; }
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
+  /* This box establishes the 3D context, so it is sorted against its own
+     children — and it sits at z=0 while every card coming toward you is at a
+     negative z, i.e. behind it. Full-bleed and opaque to hit-testing, it
+     swallowed every click until a card had swept past z=0. It draws nothing,
+     so it has no business taking the pointer. */
+  pointer-events: none;
 }
 
 .depth-item {
   position: absolute;
   left: 50%;
   top: 50%;
+  /* the corridor overrides this per frame; it is what makes the cards
+     clickable in the reduced-motion layout, where nothing runs per frame */
+  pointer-events: auto;
   visibility: hidden;
   opacity: 0;
   transform-style: preserve-3d;

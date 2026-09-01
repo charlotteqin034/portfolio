@@ -18,99 +18,132 @@ window.SITE = {
    live directly in index.html so they paint instantly — search for
    "EDIT ME" in that file. */
 
-/* Dummy projects. Everything below is placeholder copy — swap the strings,
-   keep the shape. `slug` is what shows up in the URL (project.html?p=slug).
-   `wide: true` renders the full-width, no-thumbnail card variant. */
+/* Projects, in the order you walk past them. `slug` is what shows up
+   in the URL (project.html?p=slug). `shortTitle` is optional — set it when the
+   real name is too long for a card, and it replaces `title` on the card, the
+   page headline and the prev/next boxes. `wide: true` renders the full-width,
+   no-thumbnail card variant. */
 window.PROJECTS = [
   {
-    slug: 'aurora-engine',
-    title: 'Aurora Engine',
-    blurb: 'Placeholder project. A short line about what it is.',
-    tags: ['placeholder', 'wip'],
-    year: '2026',
-    role: 'Design + build',
-    stack: 'TypeScript, WebGL',
+    slug: 'biofeedback-music',
+    title: 'Biofeedback to music composition with Sony Pictures',
+    shortTitle: 'Biofeedback to Music',
+    blurb: 'Turning physiological data into music.',
+    tags: ['sony pictures', 'vr', 'biofeedback'],
+    period: 'Sept 2025 \u2014 Jan 2026',
+    role: 'Developer',
+    team: '3 members',
+    stack: 'Unreal Engine, Meta Quest 3, Ableton Live, Polar H-10, Muse 2 Headband',
     accent: '#b06bff',
     body: [
-      'Placeholder copy. Replace this with the story of the project — what the problem was, who it was for, and what constraints you were working inside.',
-      'A second paragraph works well for the approach: what you tried, what you threw away, and the decision you would defend in a review.'
+      'I had the opportunity to work with Sony on a creative project focused on transmedia: combining different mediums of technology and expression to create a unique experience. My two other team members and I came from a game development background, which shaped the design and mechanics of the experience. We wanted to flip traditional gameplay on its head; instead of relying on intentional input, the standard for most games, we chose to use involuntary physiological signals to influence the world around the player. To achieve this, we incorporated a range of novel technology, including VR headsets and unconventional consumer health products, to push past the boundaries of what we typically see in interactive experiences today.',
+      'This ambition brought extra obstacles. Since we were working in uncharted territory, there was no blueprint or established process to follow. We had to research and iterate independently, exploring and adapting as we went. My role centered on building the EEG-to-music translation system, learning and applying Ableton\'s Max for Live coding language to map brainwave readings to musical elements.',
+      'Our finished product was a custom-modeled VR environment with music tied to the user\'s biofeedback. EEG signals governed the music composition, with different brainwaves controlling elements like notes, rhythm, and key, while heart rate drove the tempo. We also built dynamic visuals that shifted and transformed alongside the music, along with a sonar-like effect (similar to Honmoon from K-pop Demon Hunters) that pulsed outward across the environment with every heartbeat. We presented the project internally to Sony employees in the US and Japan, and I spoke about the work on a panel at South by Southwest 2026.'
     ],
-    highlights: ['Placeholder outcome one', 'Placeholder outcome two', 'Placeholder outcome three']
+    highlights: [
+      'Spoke about the project on a panel at South by Southwest 2026',
+      'Learned to break an unmapped problem down into pieces I understood',
+      'The coolest thing I have made'
+    ]
   },
   {
-    slug: 'pixel-drift',
-    title: 'Pixel Drift',
-    blurb: 'Placeholder project. A short line about what it is.',
-    tags: ['placeholder', 'game'],
-    year: '2026',
-    role: 'Solo build',
-    stack: 'Canvas, Web Audio',
-    accent: '#ff5ea8',
-    body: [
-      'Placeholder copy. Replace this with the story of the project — what the problem was, who it was for, and what constraints you were working inside.',
-      'A second paragraph works well for the approach: what you tried, what you threw away, and the decision you would defend in a review.'
-    ],
-    highlights: ['Placeholder outcome one', 'Placeholder outcome two']
-  },
-  {
-    slug: 'signal-garden',
-    title: 'Signal Garden',
-    blurb: 'Placeholder project. A short line about what it is.',
-    tags: ['placeholder', 'tooling'],
-    year: '2025',
-    role: 'Engineering',
-    stack: 'Python, Postgres',
+    slug: 'prox',
+    title: 'Prox',
+    blurb: 'Intern at a grocery deals startup.',
+    tags: ['startup', 'search', 'data pipeline'],
+    period: 'Jan 2026 \u2014 May 2026',
+    role: 'Software Developer Intern',
+    team: 'Solo, with the founder as PM',
+    stack: 'TypeScript, Supabase, PostgreSQL, OpenAI API',
     accent: '#5ee0c8',
-    body: [
-      'Placeholder copy. Replace this with the story of the project — what the problem was, who it was for, and what constraints you were working inside.',
-      'A second paragraph works well for the approach: what you tried, what you threw away, and the decision you would defend in a review.'
+    links: [
+      { label: 'App Store', url: 'https://apps.apple.com/us/app/prox-grocery-savings/id6759476458' }
     ],
-    highlights: ['Placeholder outcome one', 'Placeholder outcome two']
+    body: [
+      'During my time working for Prox, a grocery deals startup, I worked on cleaning data (categorizing, brand-matching, and normalizing size information for retail grocery products), which served the overarching goal of improving search results within the Prox app. The existing search relied purely on keyword matching and ignored the intent behind each query.',
+      'Since this work was for a startup, the available tech was limited, so I built a serverless data enrichment pipeline in TypeScript on Supabase Edge Functions, while working to minimize and continually reduce AI API usage to control costs. I used additional categorization techniques to group products into common search patterns, paired with LLM fallback for uncertain categorizations, to eliminate irrelevant grocery items from specific searches. This added semantic functionality, matching by meaning rather than just keywords. The new system reduced irrelevant results by over 70%.'
+    ],
+    highlights: [
+      'Built a system that reduced irrelevant results by over 70%',
+      'Build and iterate quickly',
+      'Working within constraints'
+    ]
   },
   {
-    slug: 'nightshift',
-    title: 'Nightshift',
-    blurb: 'Placeholder project. A short line about what it is.',
-    tags: ['placeholder', 'mobile'],
-    year: '2025',
-    role: 'Design + build',
-    stack: 'Swift, CoreML',
-    accent: '#ffb347',
-    body: [
-      'Placeholder copy. Replace this with the story of the project — what the problem was, who it was for, and what constraints you were working inside.',
-      'A second paragraph works well for the approach: what you tried, what you threw away, and the decision you would defend in a review.'
-    ],
-    highlights: ['Placeholder outcome one', 'Placeholder outcome two']
-  },
-  {
-    slug: 'vector-bloom',
-    title: 'Vector Bloom',
-    blurb: 'Placeholder project. A short line about what it is.',
-    tags: ['placeholder', 'research'],
-    year: '2025',
-    role: 'Research',
-    stack: 'PyTorch',
+    slug: 'agents-on-air',
+    title: 'Agents on Air',
+    blurb: 'A fully interactive, AI-driven podcast experience in real time.',
+    tags: ['hackathon', 'azure', 'real-time ai'],
+    period: 'Feb 2026',
+    role: 'Developer',
+    team: '3 members',
+    stack: 'Azure, React.js, Node.js/Express, OpenAI',
     accent: '#7aa2ff',
     body: [
-      'Placeholder copy. Replace this with the story of the project — what the problem was, who it was for, and what constraints you were working inside.',
-      'A second paragraph works well for the approach: what you tried, what you threw away, and the decision you would defend in a review.'
+      'In partnership with Microsoft for Startups, this 24-hour hackathon gave each team access to Microsoft Azure credits. My team and I wanted to leverage as many Azure services as possible within this project (Redis, Web PubSub, OpenAI, Speech, Container Apps, and Static Web Apps) while creating a unique software product. We developed Agents on Air, a real-time AI podcast platform that generates conversational episodes between AI hosts. First, an LLM generates a general outline of the podcast; then, for each host\'s turn, a specific script is generated in real time, responding to the previous message while following the outline. This structure enables listener interaction: users can seamlessly ask questions and add to the conversation through voice chat or text input, with low latency.',
+      'My time was spent designing and developing the entire backend and Azure service orchestration. I navigated the challenge of creating a seamless experience for listeners, ensuring that script generation, conversation flow, and user interaction happened without significant pauses. This project also gave me the opportunity to learn how Azure services are configured, how they work together, and how they integrate into a codebase.'
     ],
-    highlights: ['Placeholder outcome one', 'Placeholder outcome two']
+    highlights: [
+      'Experience with cloud services',
+      'Improving latency for AI services'
+    ]
   },
   {
-    slug: 'halfmoon',
-    title: 'Halfmoon',
-    blurb: 'Placeholder project. The full-width card with no thumbnail.',
-    tags: ['placeholder'],
-    year: '2024',
-    role: 'Side project',
-    stack: 'Whatever you like',
-    accent: '#c9a6ff',
-    wide: true,
+    slug: 'break-to-make',
+    title: 'Break to Make',
+    blurb: 'An electric composter doubling as a decorative plant stake, built at a 24-hour makeathon.',
+    tags: ['makeathon', 'hardware', 'arduino'],
+    period: 'Sept 2025',
+    role: 'Engineer / Developer',
+    team: '3 members',
+    stack: 'Arduino, LCD screen, temperature sensor, heater module, servos',
+    accent: '#86e06b',
     body: [
-      'Placeholder copy. Replace this with the story of the project — what the problem was, who it was for, and what constraints you were working inside.'
+      'This 24-hour makeathon\'s theme was "Tech for Good," encouraging us to build physical products rather than software. This was one of my first experiences building with hardware coming from a traditional software background, so it gave me the opportunity to explore a new discipline.',
+      'Our product was an electric composter shaped like a decorative plant stake. To use it, a user drops in fruit peels which are dehydrated and composted, then automatically fed straight into the plant pot. My responsibilities centered on wiring the Arduino to the temperature sensor, heater modules, LCD, and servos, then rigging everything into the final build, which proved harder than anticipated due to space constraints. I was building until the very last moment, but we produced a working proof of concept, pitched it to a panel of judges, and won the environmental track of the makeathon.'
     ],
-    highlights: ['Placeholder outcome one']
+    highlights: [
+      'Won the environmental track',
+      'Learning to thrive under pressure',
+      'Making physical tech is so rewarding'
+    ]
+  },
+  {
+    slug: 'nethra',
+    title: 'Nethra',
+    blurb: 'Simplifying complex and fragmented event planning through 3D previsualization.',
+    tags: ['startup', '3d', 'photogrammetry'],
+    period: 'Jan 2026 \u2014 May 2026',
+    role: 'Co-founder',
+    team: '2 members',
+    stack: 'Tauri 2, React/TypeScript, Three.js, OpenDroneMap, DJI Mini drone',
+    accent: '#ff5ea8',
+    body: [
+      'After countless problem discovery calls with event planners, lighting designers, and production managers, my cofounder and I decided to work within the live entertainment industry to address the challenge of planning and designing an event. For our project, Nethra, my work centered on UI/UX design of the 3D editor and developing the technical pipeline from drone photogrammetry to software.',
+      'The most important feature was our ability to leverage drone photogrammetry to generate 3D models of an event venue, saving the time and cost of sourcing 3D modelers to build one by hand. The drone captures hundreds of photos of the venue in flight, then OpenDroneMap processes them into the model. This model is uploaded into Nethra, where planners can design the event through an intuitive, easy-to-use interface, accelerating the planning process for large-scale events.'
+    ],
+    highlights: [
+      'Pitched the product to a panel of investors',
+      'Design partnerships with Tomorrowland Brasil, Afterlife, and Lollapalooza Brasil'
+    ]
+  },
+  {
+    slug: 'mist-hologram',
+    title: 'Mist Hologram',
+    blurb: 'A fog-curtain hologram.',
+    tags: ['side project', 'hardware', 'prototype'],
+    period: 'March 2026',
+    role: 'Engineer',
+    team: '2 members',
+    stack: 'Trash bin, pipes, fog machine',
+    accent: '#ffb347',
+    body: [
+      'One side project we explored before landing on [Nethra](nethra) was a Mist Hologram. This version was specifically built as a technical feasibility test, where my co-founder and I put together a quick proof of concept in a single day. I focused on designing and building the internal structure, which included routing fog from a fog machine into an internal ice chamber to cool it, then pushing it out through a custom spout to form a clean fog curtain.'
+    ],
+    highlights: [
+      'It looked really cool',
+      'Always be building'
+    ]
   }
 ];
 
@@ -137,6 +170,29 @@ window.SiteUtil = (function () {
 
   function href(project) {
     return 'project.html?p=' + encodeURIComponent(project.slug);
+  }
+
+  /* Body copy is plain text, but a paragraph occasionally needs to point at
+     another project or an outside page. `[label](target)` does it: a target
+     that looks like a URL opens in a new tab, anything else is read as a
+     project slug. Everything is escaped first, so the copy can never inject
+     markup — only these two link shapes survive. */
+  function richText(str) {
+    return esc(str).replace(/\[([^\]\n]+)\]\(([^)\s]+)\)/g, function (whole, label, target) {
+      if (/^https?:/i.test(target)) {
+        return '<a href="' + target + '" target="_blank" rel="noopener">' + label + '</a>';
+      }
+      var hit = bySlug(target);
+      return hit ? '<a href="' + href(hit.project) + '">' + label + '</a>' : label;
+    });
+  }
+
+  /* The name a project goes by in tight spaces — the corridor card, the page
+     headline, the prev/next boxes. Everything is set in a monospaced pixel
+     face, so a long formal name eats three or four lines there. The full
+     `title` still owns the browser tab and the detail page. */
+  function shortName(project) {
+    return project.shortTitle || project.title;
   }
 
   /* A fake app screenshot, drawn as flat rects so it stays crisp and pixel-y.
@@ -230,5 +286,6 @@ window.SiteUtil = (function () {
     );
   }
 
-  return { esc: esc, pad2: pad2, bySlug: bySlug, href: href, thumbSVG: thumbSVG };
+  return { esc: esc, richText: richText, pad2: pad2, bySlug: bySlug, href: href,
+           shortName: shortName, thumbSVG: thumbSVG };
 })();

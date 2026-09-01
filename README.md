@@ -39,20 +39,28 @@ detail page all read from it, so nothing else needs touching.
 {
   slug: 'my-project',           // becomes project.html?p=my-project
   title: 'My Project',
+  shortTitle: 'Shorter',        // optional; used on the card, headline and prev/next
   blurb: 'One line for the card.',
   tags: ['react', 'webgl'],
-  year: '2026',
+  period: 'Sept 2025 — Jan 2026',   // shown on the card as "01 / <period>"
   role: 'Design + build',
+  team: '3 members',
   stack: 'TypeScript, three.js',
   accent: '#b06bff',            // tints the card, the thumbnail and the detail page
   wide: false,                  // true = full-width card with no thumbnail
-  body: ['First paragraph.', 'Second paragraph.'],
+  links: [{ label: 'App Store', url: 'https://…' }],   // optional, detail page only
+  body: ['First paragraph.', 'A line linking to [another project](its-slug).'],
   highlights: ['A thing that went well']
 }
 ```
 
 Order in the array is the order you walk past them. Cards alternate left/right
 automatically.
+
+Body paragraphs are plain text, with one exception: `[label](target)` becomes a
+link. A target that looks like a URL opens in a new tab; anything else is read
+as a project slug, so `[Nethra](nethra)` links to that project's page.
+Everything else is escaped, so copy can never inject markup.
 
 The card thumbnails are fake app screenshots drawn in code
 (`SiteUtil.thumbSVG`), picked by position and tinted with `accent` — there are
