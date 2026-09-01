@@ -529,8 +529,13 @@ a { color: inherit; }
   display: block;
 }
 .card__thumb--cover img.is-cover { object-fit: cover; }
-/* the whole frame, letterboxed against the card rather than cropped */
-.card__thumb--cover img.is-contain { object-fit: contain; }
+/* The whole frame rather than a crop. The image box still fills the panel, so
+   its own background is what shows in the letterbox bars — black, so a shot on
+   a dark UI reads as one continuous field instead of a floating rectangle. */
+.card__thumb--cover img.is-contain {
+  object-fit: contain;
+  background: #000;
+}
 .card__thumb--cover img.is-left { object-position: left center; }
 .card__thumb--cover img.is-right { object-position: right center; }
 .card__thumb--cover img.is-top { object-position: center top; }
