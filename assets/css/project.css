@@ -199,6 +199,22 @@
   min-width: 0;
 }
 .proj__shot--wide { grid-column: 1 / -1; }
+
+/* a phone screenshot sits in the mockup, centred in its column */
+.proj__shot .phone {
+  width: min(300px, 100%);
+  height: auto;
+  margin: 0 auto;
+  border-radius: 26px;
+  padding: 8px;
+}
+.proj__shot .phone__screen { border-radius: 19px; }
+.proj__shot .phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+}
 .proj__shot img,
 .proj__shot video {
   display: block;

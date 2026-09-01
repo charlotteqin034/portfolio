@@ -548,6 +548,8 @@ a { color: inherit; }
   background: #0a0713;
 }
 .phone__screen .thumb { width: 100%; height: auto; display: block; }
+/* a real screenshot fills the frame the same way the drawn one does */
+.phone__screen img.thumb { object-fit: cover; object-position: top; }
 
 /* the last card is the reference's full-width, no-thumbnail variant */
 .card--wide {

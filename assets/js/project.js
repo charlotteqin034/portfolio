@@ -69,8 +69,13 @@
       ? '<video src="' + U.esc(m.src) + '" controls playsinline preload="metadata"' +
         (m.poster ? ' poster="' + U.esc(m.poster) + '"' : '') + '></video>'
       : '<img src="' + U.esc(m.src) + '" alt="' + U.esc(m.caption) + '" loading="lazy">';
-    // the lead item and every clip get the full width; extra stills pair up
-    var wide = n === 0 || m.kind === 'video' ? ' proj__shot--wide' : '';
+    if (m.frame === 'phone') {
+      el = '<div class="phone"><div class="phone__screen">' + el + '</div></div>';
+    }
+    /* The lead item and every clip take the full width; phone screenshots never
+       do — blown up they are mostly empty margin — so they pair off instead. */
+    var wide = m.frame !== 'phone' && (n === 0 || m.kind === 'video')
+      ? ' proj__shot--wide' : '';
     return '<figure class="proj__shot' + wide + '">' + el +
       (m.caption ? '<figcaption>' + U.esc(m.caption) + '</figcaption>' : '') +
       '</figure>';

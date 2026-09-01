@@ -36,17 +36,25 @@ Drop files into `assets/media/<slug>/` — one folder per project, already
 created. Then point at them from the project:
 
 ```js
-cover: 'assets/media/prox/cover.jpg',      // card thumbnail + page banner
+cover: 'assets/media/break-to-make/build-table.jpg',   // stands for the project
 media: [
-  'assets/media/prox/search.png',          // just a path, or…
-  { src: 'assets/media/prox/demo.mp4', caption: 'Semantic search in action.' }
+  'assets/media/break-to-make/detail.jpg',             // just a path, or…
+  { src: 'assets/media/aoa/demo.mp4', caption: 'The podcast in action.',
+    poster: 'assets/media/aoa/demo-poster.jpg' },
+  { src: 'assets/media/prox/deals-home.jpg', frame: 'phone',
+    caption: 'The deals feed.' }
 ]
 ```
 
 The detail page shows all of it as one gallery — `cover` leads, then `media` in
 order. The lead item and every clip span the full width; extra stills pair up
 two to a row. `cover` also fills the card's left panel in the corridor, which
-is why it is its own field. A project with no media at all falls back to the
+is why it is its own field — it takes the same options as any media entry, so
+it can be a bare path or an object.
+
+`frame: 'phone'` puts a tall screenshot inside the site's phone mockup instead
+of cropping it into a wide panel, on the card and in the gallery both. Use it
+for anything shot on a phone; leave it off for landscape stills and photos. A project with no media at all falls back to the
 procedural fake screenshot. `.mp4` and `.webm` become players (add
 `poster: '…'` for a still frame); anything else is treated as an image.
 

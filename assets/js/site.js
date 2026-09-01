@@ -24,10 +24,11 @@ window.SITE = {
    page headline and the prev/next boxes. `wide: true` renders the full-width,
    no-thumbnail card variant.
 
-   Media is optional and lives in assets/media/<slug>/. `cover` is one image,
-   used as the card thumbnail and the banner on the detail page. `media` is a
-   list shown under the write-up — images and .mp4/.webm video, each entry
-   either a path or { src, caption, poster }. */
+   Media is optional and lives in assets/media/<slug>/. `cover` is the image
+   that stands for the project on its corridor card; it also leads the gallery
+   on the detail page, where `media` follows it. Every entry — cover included —
+   is a path or { src, caption, poster, frame }. frame: 'phone' puts a tall
+   screenshot inside the site's phone mockup instead of a full-bleed panel. */
 window.PROJECTS = [
   {
     slug: 'biofeedback-music',
@@ -61,6 +62,12 @@ window.PROJECTS = [
     team: 'Solo, with the founder as PM',
     stack: 'TypeScript, Supabase, PostgreSQL, OpenAI API',
     accent: '#5ee0c8',
+    cover: { src: 'assets/media/prox/deals-search.jpg', frame: 'phone',
+             caption: 'Search results after the enrichment pipeline.' },
+    media: [
+      { src: 'assets/media/prox/deals-home.jpg', frame: 'phone',
+        caption: 'The deals feed the search feeds into.' }
+    ],
     links: [
       { label: 'App Store', url: 'https://apps.apple.com/us/app/prox-grocery-savings/id6759476458' }
     ],
@@ -110,6 +117,8 @@ window.PROJECTS = [
     team: '3 members',
     stack: 'Arduino, LCD screen, temperature sensor, heater module, servos',
     accent: '#86e06b',
+    cover: { src: 'assets/media/break-to-make/build-table.jpg',
+             caption: 'Wiring the Arduino, somewhere in hour eighteen.' },
     body: [
       'This 24-hour makeathon\'s theme was "Tech for Good," encouraging us to build physical products rather than software. This was one of my first experiences building with hardware coming from a traditional software background, so it gave me the opportunity to explore a new discipline.',
       'Our product was an electric composter shaped like a decorative plant stake. To use it, a user drops in fruit peels which are dehydrated and composted, then automatically fed straight into the plant pot. My responsibilities centered on wiring the Arduino to the temperature sensor, heater modules, LCD, and servos, then rigging everything into the final build, which proved harder than anticipated due to space constraints. I was building until the very last moment, but we produced a working proof of concept, pitched it to a panel of judges, and won the environmental track of the makeathon.'
@@ -208,7 +217,10 @@ window.SiteUtil = (function () {
       src: m.src || '',
       kind: /\.(mp4|webm)$/i.test(m.src || '') ? 'video' : 'image',
       poster: m.poster || '',
-      caption: m.caption || ''
+      caption: m.caption || '',
+      // a tall phone screenshot belongs in the site's phone mockup; cropping
+      // one into a wide panel throws most of the screen away
+      frame: m.frame === 'phone' ? 'phone' : ''
     };
   }
 
