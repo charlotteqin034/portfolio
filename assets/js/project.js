@@ -62,24 +62,70 @@
      corridor card needs to know which image represents the project. */
   var shots = (p.cover ? [p.cover] : []).concat(p.media || []);
 
-  var gallery = shots.map(function (entry, n) {
-    var m = U.media(entry);
-    if (!m.src) return '';
+  var items = shots.map(U.media).filter(function (m) { return m.src; });
+
+  /* Two layouts. Phone screenshots are small enough to sit side by side, so a
+     set of them stays a grid you take in at a glance. Anything bigger — a
+     landscape still, a clip — gets a carousel instead: one at a time, full
+     size, clicked through. `gallery: 'grid' | 'carousel'` overrides. */
+  var everyOneAPhone = items.length > 0 && items.every(function (m) {
+    return m.frame === 'phone';
+  });
+  var mode = p.gallery || (items.length > 1 && !everyOneAPhone ? 'carousel' : 'grid');
+
+  function mediaEl(m) {
     var el = m.kind === 'video'
       ? '<video src="' + U.esc(m.src) + '" controls playsinline preload="metadata"' +
         (m.poster ? ' poster="' + U.esc(m.poster) + '"' : '') + '></video>'
       : '<img src="' + U.esc(m.src) + '" alt="' + U.esc(m.caption) + '" loading="lazy">';
-    if (m.frame === 'phone') {
-      el = '<div class="phone"><div class="phone__screen">' + el + '</div></div>';
-    }
-    /* The lead item and every clip take the full width; phone screenshots never
-       do — blown up they are mostly empty margin — so they pair off instead. */
-    var wide = m.frame !== 'phone' && (n === 0 || m.kind === 'video')
-      ? ' proj__shot--wide' : '';
-    return '<figure class="proj__shot' + wide + '">' + el +
-      (m.caption ? '<figcaption>' + U.esc(m.caption) + '</figcaption>' : '') +
-      '</figure>';
-  }).join('');
+    return m.frame === 'phone'
+      ? '<div class="phone"><div class="phone__screen">' + el + '</div></div>'
+      : el;
+  }
+
+  function gridHTML() {
+    return '<div class="proj__gallery">' + items.map(function (m, n) {
+      // the lead item and every clip take the full width; phone shots pair off
+      var wide = m.frame !== 'phone' && (n === 0 || m.kind === 'video')
+        ? ' proj__shot--wide' : '';
+      return '<figure class="proj__shot' + wide + '">' + mediaEl(m) +
+        (m.caption ? '<figcaption>' + U.esc(m.caption) + '</figcaption>' : '') +
+        '</figure>';
+    }).join('') + '</div>';
+  }
+
+  function carouselHTML() {
+    /* The caption lives under the stage, not over the picture: these are
+       screenshots, and a scrim across the bottom of one covers the very UI it
+       is meant to be showing. */
+    var slides = items.map(function (m, n) {
+      return '<figure class="gal__slide' + (n === 0 ? ' is-current' : '') + '"' +
+        ' data-caption="' + U.esc(m.caption) + '"' +
+        (n === 0 ? '' : ' aria-hidden="true"') + '>' + mediaEl(m) + '</figure>';
+    }).join('');
+
+    var dots = items.map(function (m, n) {
+      return '<button type="button" class="gal__dot' + (n === 0 ? ' is-current' : '') +
+        '" data-go="' + n + '" aria-label="Show item ' + (n + 1) + '"' +
+        (n === 0 ? ' aria-current="true"' : '') + '></button>';
+    }).join('');
+
+    return '<div class="gal" data-gallery aria-roledescription="carousel">' +
+      '<div class="gal__stage">' + slides + '</div>' +
+      '<div class="gal__bar">' +
+        '<button type="button" class="gal__nav gal__nav--prev" data-step="-1" ' +
+          'aria-label="Previous"><span aria-hidden="true"></span></button>' +
+        '<span class="gal__count">' + U.pad2(1) + ' / ' + U.pad2(items.length) + '</span>' +
+        '<div class="gal__dots">' + dots + '</div>' +
+        '<button type="button" class="gal__nav gal__nav--next" data-step="1" ' +
+          'aria-label="Next"><span aria-hidden="true"></span></button>' +
+      '</div>' +
+      '<p class="gal__caption">' + U.esc(items[0].caption) + '</p>' +
+    '</div>';
+  }
+
+  var gallery = !items.length ? ''
+    : mode === 'carousel' ? carouselHTML() : gridHTML();
 
   var highlights = (p.highlights || []).map(function (h) {
     return '<li>' + U.esc(h) + '</li>';
@@ -98,7 +144,7 @@
     '</header>' +
 
     (gallery
-      ? '<div class="proj__gallery">' + gallery + '</div>'
+      ? gallery
       : '<div class="proj__screen">' +
           '<div class="phone"><div class="phone__screen">' + U.thumbSVG(p, i) + '</div></div>' +
         '</div>') +
@@ -124,4 +170,55 @@
       '<a href="' + U.href(next) + '"><span class="lbl">Next</span>' +
         '<span class="nm">' + U.esc(U.shortName(next)) + '</span></a>' +
     '</nav>';
+
+  wireCarousel(root.querySelector('[data-gallery]'));
+
+  /* ---------------- carousel ---------------- */
+  function wireCarousel(gal) {
+    if (!gal) return;
+
+    var slides = [].slice.call(gal.querySelectorAll('.gal__slide'));
+    var dots = [].slice.call(gal.querySelectorAll('.gal__dot'));
+    var count = gal.querySelector('.gal__count');
+    var caption = gal.querySelector('.gal__caption');
+    var at = 0;
+
+    function show(n) {
+      n = (n % slides.length + slides.length) % slides.length;   // wrap both ways
+      if (n === at) return;
+      slides[at].classList.remove('is-current');
+      slides[at].setAttribute('aria-hidden', 'true');
+      // a clip left behind should not keep playing under the next slide
+      var playing = slides[at].querySelector('video');
+      if (playing) playing.pause();
+      dots[at].classList.remove('is-current');
+      dots[at].removeAttribute('aria-current');
+
+      at = n;
+      slides[at].classList.add('is-current');
+      slides[at].removeAttribute('aria-hidden');
+      dots[at].classList.add('is-current');
+      dots[at].setAttribute('aria-current', 'true');
+      if (count) count.textContent = U.pad2(at + 1) + ' / ' + U.pad2(slides.length);
+      if (caption) caption.textContent = slides[at].getAttribute('data-caption') || '';
+    }
+
+    gal.addEventListener('click', function (e) {
+      var step = e.target.closest('[data-step]');
+      if (step) return show(at + parseInt(step.getAttribute('data-step'), 10));
+      var go = e.target.closest('[data-go]');
+      if (go) return show(parseInt(go.getAttribute('data-go'), 10));
+      // clicking the picture advances; clicking a video would fight its controls
+      var slide = e.target.closest('.gal__slide');
+      if (slide && slide.classList.contains('is-current') && e.target.tagName !== 'VIDEO') {
+        show(at + 1);
+      }
+    });
+
+    gal.setAttribute('tabindex', '0');
+    gal.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(at - 1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); show(at + 1); }
+    });
+  }
 })();

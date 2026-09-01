@@ -91,7 +91,8 @@ window.PROJECTS = [
     team: '3 members',
     stack: 'Azure, React.js, Node.js/Express, OpenAI',
     accent: '#7aa2ff',
-    cover: 'assets/media/agents-on-air/live-session.png',
+    cover: { src: 'assets/media/agents-on-air/live-session.png',
+             caption: 'Nova and Echo mid-episode, with the floor open to listeners.' },
     media: [
       { src: 'assets/media/agents-on-air/demo.mp4',
         poster: 'assets/media/agents-on-air/demo-poster.jpg',
@@ -158,6 +159,13 @@ window.PROJECTS = [
     team: '2 members',
     stack: 'Trash bin, pipes, fog machine',
     accent: '#ffb347',
+    cover: { src: 'assets/media/mist-hologram/fog-curtain.jpg',
+             caption: 'The fog curtain, lit from the spout above it.' },
+    media: [
+      { src: 'assets/media/mist-hologram/demo.mp4',
+        poster: 'assets/media/mist-hologram/demo-poster.jpg',
+        caption: 'The curtain running.' }
+    ],
     body: [
       'One side project we explored before landing on [Nethra](nethra) was a Mist Hologram. This version was specifically built as a technical feasibility test, where my co-founder and I put together a quick proof of concept in a single day. I focused on designing and building the internal structure, which included routing fog from a fog machine into an internal ice chamber to cool it, then pushing it out through a custom spout to form a clean fog curtain.'
     ],

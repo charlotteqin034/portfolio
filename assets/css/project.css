@@ -186,6 +186,112 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
+/* ---------------- carousel: one item at a time, clicked through ---------- */
+.gal {
+  margin-top: clamp(46px, 8vh, 80px);
+  outline: none;
+}
+.gal:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+
+/* A fixed stage keeps the page from jumping as you step between a tall shot
+   and a wide one. */
+.gal__stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--panel);
+  border: 1px solid var(--line-soft);
+  overflow: hidden;
+}
+.gal__slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s ease;
+}
+.gal__slide.is-current { opacity: 1; visibility: visible; }
+.gal__slide img,
+.gal__slide video {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+}
+.gal__slide .phone { height: 92%; width: auto; padding: 8px; border-radius: 24px; }
+.gal__slide .phone__screen { border-radius: 17px; }
+.gal__slide .phone img { height: 100%; width: auto; object-fit: cover; }
+.gal__slide img { cursor: pointer; }
+
+.gal__bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+.gal__nav {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.gal__nav:hover { background: var(--panel-2); border-color: var(--accent); }
+/* the pixel face has no arrow glyphs, so draw them */
+.gal__nav span {
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+.gal__nav--prev span { border-right: 7px solid var(--accent); }
+.gal__nav--next span { border-left: 7px solid var(--accent); }
+
+.gal__count {
+  font-family: var(--pixel);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--muted-2);
+}
+.gal__dots {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+.gal__dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--muted-2);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.gal__dot:hover { border-color: var(--accent); }
+.gal__dot.is-current { background: var(--accent); border-color: var(--accent); }
+
+.gal__caption {
+  margin: 14px 0 0;
+  min-height: 1.35em;
+  max-width: 62ch;
+  font-size: 19px;
+  line-height: 1.35;
+  color: var(--muted-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gal__slide { transition: none; }
+}
+
 /* Everything the project has to show, in one gallery. auto-fit gives two
    columns when there is room; the lead item and any clip span the lot. */
 .proj__gallery {

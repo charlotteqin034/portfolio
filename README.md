@@ -47,8 +47,15 @@ media: [
 ```
 
 The detail page shows all of it as one gallery — `cover` leads, then `media` in
-order. The lead item and every clip span the full width; extra stills pair up
-two to a row. `cover` also fills the card's left panel in the corridor, which
+order. Two layouts, picked automatically:
+
+- **carousel** when there is more than one item and they are not all phone
+  screenshots — one at a time, full size, clicked through with the arrows, the
+  dots, the left/right keys, or a click on the picture itself
+- **grid** otherwise — the lead item and any clip span the full width, extra
+  stills pair up two to a row, and phone screenshots sit side by side
+
+`gallery: 'grid'` or `gallery: 'carousel'` on the project overrides the choice. `cover` also fills the card's left panel in the corridor, which
 is why it is its own field — it takes the same options as any media entry, so
 it can be a bare path or an object.
 
