@@ -46,6 +46,8 @@ window.PROJECTS = [
     team: '3 members',
     stack: 'Unreal Engine, Meta Quest 3, Ableton Live, Polar H-10, Muse 2 Headband',
     accent: '#b06bff',
+    cover: { src: 'assets/media/biofeedback-music/rig.jpg', focus: 'right',
+             caption: 'Ableton driven by live EEG bands off the headband.' },
     body: [
       'I had the opportunity to work with Sony on a creative project focused on transmedia: combining different mediums of technology and expression to create a unique experience. My two other team members and I came from a game development background, which shaped the design and mechanics of the experience. We wanted to flip traditional gameplay on its head; instead of relying on intentional input, the standard for most games, we chose to use involuntary physiological signals to influence the world around the player. To achieve this, we incorporated a range of novel technology, including VR headsets and unconventional consumer health products, to push past the boundaries of what we typically see in interactive experiences today.',
       'This ambition brought extra obstacles. Since we were working in uncharted territory, there was no blueprint or established process to follow. We had to research and iterate independently, exploring and adapting as we went. My role centered on building the EEG-to-music translation system, learning and applying Ableton\'s Max for Live coding language to map brainwave readings to musical elements.',
