@@ -113,6 +113,18 @@ The card thumbnails are fake app screenshots drawn in code
 four layouts. To use a real screenshot instead, swap the `<div class="phone">`
 contents in `home.js` → `cardHTML()` for an `<img>`.
 
+## After you change a file
+
+```bash
+python3 tools/stamp.py       # then commit and push
+```
+
+GitHub Pages sends `Cache-Control: max-age=600` on everything and gives you no
+way to change it, so a browser holding the old `site.js` keeps using it after a
+deploy and the page looks unchanged. `stamp.py` appends `?v=<hash of the file>`
+to every asset URL in the HTML, so each deploy is a different URL and the cache
+cannot answer for it. `--check` exits non-zero if a stamp is stale.
+
 ## Notes
 
 - **Fonts** are self-hosted in `assets/fonts/` (Press Start 2P for display,
