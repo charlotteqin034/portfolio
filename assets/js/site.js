@@ -31,7 +31,9 @@ window.SITE = {
    puts a tall screenshot inside the site's phone mockup instead of a full-bleed
    panel. On a card cover, fit: 'contain' shows the whole image rather than
    cropping it to fill, and focus: 'right' (or left/top/bottom/center) picks
-   which edge survives the crop. */
+   which edge survives the crop. `coverCardOnly: true` keeps the cover off the
+   detail page, for when one image is the right face for the card but something
+   else should lead the page. */
 window.PROJECTS = [
   {
     slug: 'biofeedback-music',
@@ -143,6 +145,14 @@ window.PROJECTS = [
     team: '2 members',
     stack: 'Tauri 2, React/TypeScript, Three.js, OpenDroneMap, DJI Mini drone',
     accent: '#ff5ea8',
+    cover: { src: 'assets/media/nethra/stage.jpg',
+             caption: 'The kind of show Nethra is for.' },
+    coverCardOnly: true,
+    media: [
+      { src: 'assets/media/nethra/editor.mp4',
+        poster: 'assets/media/nethra/editor-poster.jpg',
+        caption: 'The 3D editor, working on a venue built from drone photogrammetry.' }
+    ],
     body: [
       'After countless problem discovery calls with event planners, lighting designers, and production managers, my cofounder and I decided to work within the live entertainment industry to address the challenge of planning and designing an event. For our project, Nethra, my work centered on UI/UX design of the 3D editor and developing the technical pipeline from drone photogrammetry to software.',
       'The most important feature was our ability to leverage drone photogrammetry to generate 3D models of an event venue, saving the time and cost of sourcing 3D modelers to build one by hand. The drone captures hundreds of photos of the venue in flight, then OpenDroneMap processes them into the model. This model is uploaded into Nethra, where planners can design the event through an intuitive, easy-to-use interface, accelerating the planning process for large-scale events.'

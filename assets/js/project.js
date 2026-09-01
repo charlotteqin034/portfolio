@@ -60,7 +60,7 @@
   /* Everything the project has to show lives in one gallery: the cover leads
      it, the rest follow in order. The cover keeps its own field because the
      corridor card needs to know which image represents the project. */
-  var shots = (p.cover ? [p.cover] : []).concat(p.media || []);
+  var shots = (p.cover && !p.coverCardOnly ? [p.cover] : []).concat(p.media || []);
 
   var items = shots.map(U.media).filter(function (m) { return m.src; });
 
