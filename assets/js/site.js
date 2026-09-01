@@ -22,7 +22,12 @@ window.SITE = {
    in the URL (project.html?p=slug). `shortTitle` is optional — set it when the
    real name is too long for a card, and it replaces `title` on the card, the
    page headline and the prev/next boxes. `wide: true` renders the full-width,
-   no-thumbnail card variant. */
+   no-thumbnail card variant.
+
+   Media is optional and lives in assets/media/<slug>/. `cover` is one image,
+   used as the card thumbnail and the banner on the detail page. `media` is a
+   list shown under the write-up — images and .mp4/.webm video, each entry
+   either a path or { src, caption, poster }. */
 window.PROJECTS = [
   {
     slug: 'biofeedback-music',
@@ -187,6 +192,19 @@ window.SiteUtil = (function () {
     });
   }
 
+  /* A media entry is either a bare path or an object with a caption (and, for
+     video, a poster frame). Type is read off the extension so the common case
+     stays a one-liner: media: ['assets/media/prox/demo.mp4']. */
+  function media(entry) {
+    var m = typeof entry === 'string' ? { src: entry } : (entry || {});
+    return {
+      src: m.src || '',
+      kind: /\.(mp4|webm)$/i.test(m.src || '') ? 'video' : 'image',
+      poster: m.poster || '',
+      caption: m.caption || ''
+    };
+  }
+
   /* The name a project goes by in tight spaces — the corridor card, the page
      headline, the prev/next boxes. Everything is set in a monospaced pixel
      face, so a long formal name eats three or four lines there. The full
@@ -287,5 +305,5 @@ window.SiteUtil = (function () {
   }
 
   return { esc: esc, richText: richText, pad2: pad2, bySlug: bySlug, href: href,
-           shortName: shortName, thumbSVG: thumbSVG };
+           shortName: shortName, media: media, thumbSVG: thumbSVG };
 })();

@@ -1,4 +1,4 @@
-# pixel-portfolio
+# portfolio
 
 A dark, purple-tinged portfolio with a pixel display face. The homepage is type
 only. Scrolling walks a virtual camera down a corridor; project cards arrive one
@@ -29,6 +29,27 @@ and there are no ES modules — but then you are back to fighting the cache.
 | "Based in …" | the top bar in `index.html` **and** `project.html` |
 | Colours, type scale, card size | `assets/css/main.css` → `:root` |
 | Corridor feel (spacing, speed, fades) | `assets/js/home.js` → `metrics()` |
+
+### Pictures and video
+
+Drop files into `assets/media/<slug>/` — one folder per project, already
+created. Then point at them from the project:
+
+```js
+cover: 'assets/media/prox/cover.jpg',      // card thumbnail + page banner
+media: [
+  'assets/media/prox/search.png',          // just a path, or…
+  { src: 'assets/media/prox/demo.mp4', caption: 'Semantic search in action.' }
+]
+```
+
+`cover` fills the card's left panel and the banner at the top of the detail
+page; without one, the procedural fake screenshot is used instead. `media`
+renders under the write-up, in order. `.mp4` and `.webm` become players (add
+`poster: '…'` for a still frame); anything else is treated as an image.
+
+Keep files under ~10 MB each — they are served straight from the repo, and
+GitHub rejects anything over 100 MB.
 
 ### Adding or editing a project
 

@@ -40,7 +40,7 @@ class ReusableServer(socketserver.TCPServer):
 if __name__ == "__main__":
     handler = functools.partial(NoCacheHandler, directory=ROOT)
     with ReusableServer(("127.0.0.1", PORT), handler) as httpd:
-        print(f"pixel-portfolio → http://127.0.0.1:{PORT}  (Ctrl+C to stop)")
+        print(f"portfolio → http://127.0.0.1:{PORT}  (Ctrl+C to stop)")
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:

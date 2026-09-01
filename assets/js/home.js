@@ -43,9 +43,14 @@
       return '<span class="card__tag">' + U.esc(t) + '</span>';
     }).join('');
 
-    var thumb = p.wide ? '' :
-      '<div class="card__thumb"><div class="phone"><div class="phone__screen">' +
-      U.thumbSVG(p, i) + '</div></div></div>';
+    /* A real cover fills the whole left panel; without one, fall back to the
+       procedural fake screenshot in its phone frame. */
+    var thumb = p.wide ? '' : p.cover
+      ? '<div class="card__thumb card__thumb--cover">' +
+          '<img src="' + U.esc(p.cover) + '" alt="" loading="lazy">' +
+        '</div>'
+      : '<div class="card__thumb"><div class="phone"><div class="phone__screen">' +
+        U.thumbSVG(p, i) + '</div></div></div>';
 
     return (
       '<a class="card' + (p.wide ? ' card--wide' : '') + '" href="' + U.href(p) + '" ' +

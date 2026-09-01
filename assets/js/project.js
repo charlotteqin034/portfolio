@@ -57,6 +57,18 @@
       U.esc(l.label) + '<span class="ico" aria-hidden="true">&#8599;</span></a>';
   }).join('');
 
+  var gallery = (p.media || []).map(function (entry) {
+    var m = U.media(entry);
+    if (!m.src) return '';
+    var el = m.kind === 'video'
+      ? '<video src="' + U.esc(m.src) + '" controls playsinline preload="metadata"' +
+        (m.poster ? ' poster="' + U.esc(m.poster) + '"' : '') + '></video>'
+      : '<img src="' + U.esc(m.src) + '" alt="' + U.esc(m.caption) + '" loading="lazy">';
+    return '<figure class="proj__shot">' + el +
+      (m.caption ? '<figcaption>' + U.esc(m.caption) + '</figcaption>' : '') +
+      '</figure>';
+  }).join('');
+
   var highlights = (p.highlights || []).map(function (h) {
     return '<li>' + U.esc(h) + '</li>';
   }).join('');
@@ -73,9 +85,13 @@
       (tags ? '<div class="proj__tags">' + tags + '</div>' : '') +
     '</header>' +
 
-    '<div class="proj__screen">' +
-      '<div class="phone"><div class="phone__screen">' + U.thumbSVG(p, i) + '</div></div>' +
-    '</div>' +
+    (p.cover
+      ? '<div class="proj__screen proj__screen--cover">' +
+          '<img src="' + U.esc(p.cover) + '" alt="">' +
+        '</div>'
+      : '<div class="proj__screen">' +
+          '<div class="phone"><div class="phone__screen">' + U.thumbSVG(p, i) + '</div></div>' +
+        '</div>') +
 
     '<dl class="proj__facts">' +
       fact('Period', p.period) +
@@ -87,6 +103,8 @@
     (links ? '<div class="proj__links">' + links + '</div>' : '') +
 
     (body ? '<div class="proj__body">' + body + '</div>' : '') +
+
+    (gallery ? '<div class="proj__gallery">' + gallery + '</div>' : '') +
 
     (highlights
       ? '<h2 class="proj__sub">Highlights</h2><ul class="proj__highlights">' + highlights + '</ul>'
