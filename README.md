@@ -43,10 +43,20 @@ media: [
 ]
 ```
 
-`cover` fills the card's left panel and the banner at the top of the detail
-page; without one, the procedural fake screenshot is used instead. `media`
-renders under the write-up, in order. `.mp4` and `.webm` become players (add
+The detail page shows all of it as one gallery — `cover` leads, then `media` in
+order. The lead item and every clip span the full width; extra stills pair up
+two to a row. `cover` also fills the card's left panel in the corridor, which
+is why it is its own field. A project with no media at all falls back to the
+procedural fake screenshot. `.mp4` and `.webm` become players (add
 `poster: '…'` for a still frame); anything else is treated as an image.
+
+Browsers cannot play HEVC, which is what an iPhone or a Mac screen recording
+gives you in a `.mov`. Convert first:
+
+```bash
+ffmpeg -i clip.mov -vf scale=1920:-2 -c:v libx264 -preset slow -crf 24 \
+  -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart clip.mp4
+```
 
 Keep files under ~10 MB each — they are served straight from the repo, and
 GitHub rejects anything over 100 MB.

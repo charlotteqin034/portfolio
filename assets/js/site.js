@@ -84,9 +84,16 @@ window.PROJECTS = [
     team: '3 members',
     stack: 'Azure, React.js, Node.js/Express, OpenAI',
     accent: '#7aa2ff',
+    cover: 'assets/media/agents-on-air/live-session.png',
+    media: [
+      { src: 'assets/media/agents-on-air/demo.mp4',
+        poster: 'assets/media/agents-on-air/demo-poster.jpg',
+        caption: 'The podcast in action.' }
+    ],
     body: [
       'In partnership with Microsoft for Startups, this 24-hour hackathon gave each team access to Microsoft Azure credits. My team and I wanted to leverage as many Azure services as possible within this project (Redis, Web PubSub, OpenAI, Speech, Container Apps, and Static Web Apps) while creating a unique software product. We developed Agents on Air, a real-time AI podcast platform that generates conversational episodes between AI hosts. First, an LLM generates a general outline of the podcast; then, for each host\'s turn, a specific script is generated in real time, responding to the previous message while following the outline. This structure enables listener interaction: users can seamlessly ask questions and add to the conversation through voice chat or text input, with low latency.',
-      'My time was spent designing and developing the entire backend and Azure service orchestration. I navigated the challenge of creating a seamless experience for listeners, ensuring that script generation, conversation flow, and user interaction happened without significant pauses. This project also gave me the opportunity to learn how Azure services are configured, how they work together, and how they integrate into a codebase.'
+      'My time was spent designing and developing the entire backend and Azure service orchestration. I navigated the challenge of creating a seamless experience for listeners, ensuring that script generation, conversation flow, and user interaction happened without significant pauses. This project also gave me the opportunity to learn how Azure services are configured, how they work together, and how they integrate into a codebase.',
+      'Check out the video to see the podcast in action.'
     ],
     highlights: [
       'Experience with cloud services',
