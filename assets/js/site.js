@@ -48,6 +48,21 @@ window.PROJECTS = [
     accent: '#b06bff',
     cover: { src: 'assets/media/biofeedback-music/rig.jpg', focus: 'right',
              caption: 'Ableton driven by live EEG bands off the headband.' },
+    coverCardOnly: true,
+    media: [
+      { src: 'assets/media/biofeedback-music/eeg-1.mp4',
+        poster: 'assets/media/biofeedback-music/eeg-1-poster.jpg',
+        caption: 'EEG-driven composition at a resting heart rate.' },
+      { src: 'assets/media/biofeedback-music/eeg-2.mp4',
+        poster: 'assets/media/biofeedback-music/eeg-2-poster.jpg',
+        caption: 'The same system with the heart rate up — tempo follows it.' },
+      { src: 'assets/media/biofeedback-music/eeg-3.mp4',
+        poster: 'assets/media/biofeedback-music/eeg-3-poster.jpg',
+        caption: 'Asleep in the hardware: eyes closed, heart rate at its lowest.' },
+      { src: 'assets/media/biofeedback-music/translator-early.mp4',
+        poster: 'assets/media/biofeedback-music/translator-early-poster.jpg',
+        caption: 'An early build of the translator, alpha waves setting the note value.' }
+    ],
     body: [
       'I had the opportunity to work with Sony on a creative project focused on transmedia: combining different mediums of technology and expression to create a unique experience. My two other team members and I came from a game development background, which shaped the design and mechanics of the experience. We wanted to flip traditional gameplay on its head; instead of relying on intentional input, the standard for most games, we chose to use involuntary physiological signals to influence the world around the player. To achieve this, we incorporated a range of novel technology, including VR headsets and unconventional consumer health products, to push past the boundaries of what we typically see in interactive experiences today.',
       'This ambition brought extra obstacles. Since we were working in uncharted territory, there was no blueprint or established process to follow. We had to research and iterate independently, exploring and adapting as we went. My role centered on building the EEG-to-music translation system, learning and applying Ableton\'s Max for Live coding language to map brainwave readings to musical elements.',
