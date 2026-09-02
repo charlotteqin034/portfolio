@@ -61,7 +61,13 @@ window.PROJECTS = [
         caption: 'Asleep in the hardware: eyes closed, heart rate at its lowest.' },
       { src: 'assets/media/biofeedback-music/translator-early.mp4',
         poster: 'assets/media/biofeedback-music/translator-early-poster.jpg',
-        caption: 'An early build of the translator, alpha waves setting the note value.' }
+        caption: 'An early build of the translator, alpha waves setting the note value.' },
+      { src: 'assets/media/biofeedback-music/vr-environment.mp4',
+        poster: 'assets/media/biofeedback-music/vr-environment-poster.jpg',
+        caption: 'The custom VR environment with its audio-reactive visuals.' },
+      { src: 'assets/media/biofeedback-music/visuals-closeup.mp4',
+        poster: 'assets/media/biofeedback-music/visuals-closeup-poster.jpg',
+        caption: 'A closer look at the visuals: each one is driven by a different audio frequency.' }
     ],
     body: [
       'I had the opportunity to work with Sony on a creative project focused on transmedia: combining different mediums of technology and expression to create a unique experience. My two other team members and I came from a game development background, which shaped the design and mechanics of the experience. We wanted to flip traditional gameplay on its head; instead of relying on intentional input, the standard for most games, we chose to use involuntary physiological signals to influence the world around the player. To achieve this, we incorporated a range of novel technology, including VR headsets and unconventional consumer health products, to push past the boundaries of what we typically see in interactive experiences today.',
