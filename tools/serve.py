@@ -33,8 +33,13 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         return super().send_head()
 
 
-class ReusableServer(socketserver.TCPServer):
+class ReusableServer(socketserver.ThreadingTCPServer):
+    """Threaded on purpose. A project page can hold half a dozen <video>
+    elements; the browser opens a connection per file, and a single-threaded
+    server answers the first and leaves the page hanging on the rest."""
+
     allow_reuse_address = True
+    daemon_threads = True
 
 
 if __name__ == "__main__":
