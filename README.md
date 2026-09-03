@@ -1,7 +1,6 @@
 # portfolio
 
-
-[portfolio here](charlotteqin034.github.io/portfolio/)
+[charlotteqin034.github.io/portfolio/](https://charlotteqin034.github.io/portfolio/index.html)
 
 
 A portfolio with a pixel display face. The homepage is type
