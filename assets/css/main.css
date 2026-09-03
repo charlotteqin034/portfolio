@@ -620,6 +620,14 @@ a { color: inherit; }
   border: 1px solid var(--line-soft);
 }
 
+/* The kind chip is the one tag that means the same thing on every card, so it
+   takes the accent and the free-form tags stay quiet beside it. */
+.card__tag--kind {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
 .card__arrow {
   position: absolute;
   top: 24px;

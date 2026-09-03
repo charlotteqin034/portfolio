@@ -40,6 +40,7 @@ window.PROJECTS = [
     title: 'Biofeedback to music composition with Sony Pictures',
     shortTitle: 'Biofeedback to Music',
     blurb: 'Turning physiological data into music.',
+    kind: 'both',
     tags: ['sony pictures', 'vr', 'biofeedback'],
     period: 'Sept 2025 \u2014 Jan 2026',
     role: 'Developer',
@@ -84,6 +85,7 @@ window.PROJECTS = [
     slug: 'prox',
     title: 'Prox',
     blurb: 'Intern at a grocery deals startup.',
+    kind: 'software',
     tags: ['startup', 'search', 'data pipeline'],
     period: 'Jan 2026 \u2014 May 2026',
     role: 'Software Developer Intern',
@@ -113,6 +115,7 @@ window.PROJECTS = [
     slug: 'agents-on-air',
     title: 'Agents on Air',
     blurb: 'A fully interactive, AI-driven podcast experience in real time.',
+    kind: 'software',
     tags: ['hackathon', 'azure', 'real-time ai'],
     period: 'Feb 2026',
     role: 'Developer',
@@ -140,7 +143,8 @@ window.PROJECTS = [
     slug: 'break-to-make',
     title: 'Break to Make',
     blurb: 'An electric composter doubling as a decorative plant stake, built at a 24-hour makeathon.',
-    tags: ['makeathon', 'hardware', 'arduino'],
+    kind: 'hardware',
+    tags: ['makeathon', 'arduino'],
     period: 'Sept 2025',
     role: 'Engineer / Developer',
     team: '3 members',
@@ -162,6 +166,7 @@ window.PROJECTS = [
     slug: 'nethra',
     title: 'Nethra',
     blurb: 'Simplifying complex and fragmented event planning through 3D previsualization.',
+    kind: 'both',
     tags: ['startup', '3d', 'photogrammetry'],
     period: 'Jan 2026 \u2014 May 2026',
     role: 'Co-founder',
@@ -189,7 +194,8 @@ window.PROJECTS = [
     slug: 'mist-hologram',
     title: 'Mist Hologram',
     blurb: 'A fog-curtain hologram.',
-    tags: ['side project', 'hardware', 'prototype'],
+    kind: 'hardware',
+    tags: ['side project', 'prototype'],
     period: 'March 2026',
     role: 'Engineer',
     team: '2 members',
@@ -280,6 +286,18 @@ window.SiteUtil = (function () {
      `title` still owns the browser tab and the detail page. */
   function shortName(project) {
     return project.shortTitle || project.title;
+  }
+
+  /* Hardware / software / both. It rides in its own filled chip ahead of the
+     free-form tags: it is the one tag that means the same thing on every card,
+     so it is worth being able to scan down the corridor and read only that. */
+  var KINDS = {
+    hardware: 'hardware',
+    software: 'software',
+    both: 'hardware + software'
+  };
+  function kindLabel(project) {
+    return KINDS[project.kind] || '';
   }
 
   /* A fake app screenshot, drawn as flat rects so it stays crisp and pixel-y.
@@ -374,5 +392,6 @@ window.SiteUtil = (function () {
   }
 
   return { esc: esc, richText: richText, pad2: pad2, bySlug: bySlug, href: href,
-           shortName: shortName, media: media, thumbSVG: thumbSVG };
+           shortName: shortName, kindLabel: kindLabel, media: media,
+           thumbSVG: thumbSVG };
 })();

@@ -39,9 +39,11 @@
 
   /* ---------------- build the scene ---------------- */
   function cardHTML(p, i) {
-    var tags = (p.tags || []).map(function (t) {
-      return '<span class="card__tag">' + U.esc(t) + '</span>';
-    }).join('');
+    var kind = U.kindLabel(p);
+    var tags = (kind ? '<span class="card__tag card__tag--kind">' + U.esc(kind) + '</span>' : '') +
+      (p.tags || []).map(function (t) {
+        return '<span class="card__tag">' + U.esc(t) + '</span>';
+      }).join('');
 
     /* A landscape cover fills the whole left panel; a phone screenshot goes in
        the phone mockup, same as the procedural fallback. */
