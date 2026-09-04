@@ -75,13 +75,15 @@
 
   /* ---------------- the stack cloud ----------------
 
-     Every distinct tool across the six projects, scattered beside the
-     headline. Placement is seeded, not random: the field is part of the
-     layout, and a version that reshuffled on every load would be a
-     different page each visit. */
+     Every distinct tool across the six projects, drifting beside the headline
+     and breathing in and out of focus. Placement is seeded, not random: the
+     field is part of the layout, and a version that reshuffled on every load
+     would be a different page each visit. */
 
   var cloud = document.getElementById('cloud');
-  if (cloud) {
+  if (cloud) buildCloud(cloud);
+
+  function buildCloud(host) {
     var terms = [];
     var seen = {};
     window.PROJECTS.forEach(function (p) {
@@ -91,6 +93,7 @@
         if (t && !seen[key]) { seen[key] = 1; terms.push(t); }
       });
     });
+    if (!terms.length) return;
 
     var seed = 20260904;
     function rnd() {
@@ -104,20 +107,98 @@
     var COLS = 3;
     var ROWS = Math.ceil(terms.length / COLS);
 
-    cloud.innerHTML = terms.map(function (t, n) {
-      /* z is depth: the near ones are bigger, brighter and sharp, the far
-         ones small, dim and slightly out of focus. */
-      var z = rnd();
-      var size = (9.5 + z * 6).toFixed(1);
-      var op = (0.10 + z * 0.40).toFixed(2);
-      var blur = ((1 - z) * 1.5).toFixed(2);
+    /* Each word is two stacked copies of itself, one sharp and one already
+       blurred, and coming into focus is a cross-fade between them. Animating
+       `filter: blur()` directly would re-rasterise every word on every frame;
+       opacity is a compositor job and costs nothing. */
+    host.innerHTML = terms.map(function (t, n) {
       var col = n % COLS;
       var row = (n / COLS) | 0;
       var x = (((col + 0.18 + rnd() * 0.64) / COLS) * 100).toFixed(2);
       var y = (((row + 0.15 + rnd() * 0.70) / ROWS) * 100).toFixed(2);
-      return '<span style="left:' + x + '%;top:' + y + '%;font-size:' + size +
-        'px;opacity:' + op + ';filter:blur(' + blur + 'px)">' + U.esc(t) + '</span>';
+      var e = U.esc(t);
+      return '<span class="cloud__w" style="left:' + x + '%;top:' + y + '%">' +
+          '<b class="cloud__sharp">' + e + '</b>' +
+          '<b class="cloud__soft">' + e + '</b>' +
+        '</span>';
     }).join('');
+
+    var words = [].slice.call(host.querySelectorAll('.cloud__w')).map(function (el) {
+      return {
+        el: el,
+        sharp: el.querySelector('.cloud__sharp'),
+        soft: el.querySelector('.cloud__soft'),
+        /* Every word keeps its own periods and phase, so the field never
+           pulses in unison — that would read as a blinking page, not depth.
+           The slowest focus cycle is about a minute, the fastest about
+           twenty-five seconds. */
+        fz: 0.10 + rnd() * 0.16, phz: rnd() * 6.283,
+        fx: 0.05 + rnd() * 0.07, phx: rnd() * 6.283,
+        fy: 0.04 + rnd() * 0.07, phy: rnd() * 6.283,
+        ax: 8 + rnd() * 12,
+        ay: 6 + rnd() * 10
+      };
+    });
+
+    function frame(t) {
+      for (var i = 0; i < words.length; i++) {
+        var w = words[i];
+        var z = 0.5 + 0.5 * Math.sin(t * w.fz + w.phz);      // 0 far, 1 near
+        var dx = w.ax * Math.sin(t * w.fx + w.phx);
+        var dy = w.ay * Math.sin(t * w.fy + w.phy);
+        var bright = 0.09 + z * 0.42;
+        w.el.style.transform =
+          'translate(-50%,-50%) translate(' + dx.toFixed(2) + 'px,' +
+          dy.toFixed(2) + 'px) scale(' + (0.82 + z * 0.5).toFixed(3) + ')';
+        w.sharp.style.opacity = (bright * z).toFixed(3);
+        w.soft.style.opacity = (bright * (1 - z)).toFixed(3);
+      }
+    }
+
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (still && still.matches) {
+      frame(0);
+      return;
+    }
+
+    var visible = true;
+    var raf = 0;
+    var last = 0;
+    /* 20fps, not 60. The fastest word drifts at about 2.4px a second, so even
+       here it moves a tenth of a pixel between frames — the motion is really a
+       slow cross-fade, and three times the frames would buy nothing visible.
+       (The cloud's own arithmetic is 0.04ms a frame; the cost is compositing
+       two dozen text layers, so the way to spend less is to do it less often.) */
+    var FRAME = 1000 / 20;
+
+    function loop(now) {
+      raf = window.requestAnimationFrame(loop);
+      if (now - last < FRAME) return;
+      last = now;
+      frame(now / 1000);
+    }
+    function start() {
+      if (!raf && visible && !document.hidden) raf = window.requestAnimationFrame(loop);
+    }
+    function stop() {
+      if (raf) { window.cancelAnimationFrame(raf); raf = 0; }
+    }
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop(); else start();
+    });
+
+    /* Scrolled past the hero this is a couple of dozen elements being
+       restyled for nobody, so it stops until the cloud is on screen again. */
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        if (visible) start(); else stop();
+      }, { threshold: 0 }).observe(host);
+    }
+
+    frame(0);
+    start();
   }
 
   /* ---------------- reveal on scroll ---------------- */

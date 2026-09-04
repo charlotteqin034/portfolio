@@ -318,14 +318,28 @@ body.is-scrolled .nav {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 88%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 30%, #000 88%, transparent);
 }
-.cloud span {
+.cloud__w {
   position: absolute;
   white-space: nowrap;
   font-family: var(--mono);
-  font-weight: 400;
+  font-size: 13px;
   letter-spacing: 0.02em;
   color: var(--text);
   transform: translate(-50%, -50%);
+  will-change: transform;
+}
+.cloud__w b {
+  display: block;
+  font-weight: 400;
+  opacity: 0.25;   /* home.js takes over on its first frame */
+}
+/* The blurred twin sits exactly over the sharp one. Focus is the cross-fade
+   between the two, so the blur itself is set once and never animated. */
+.cloud__soft {
+  position: absolute;
+  left: 0;
+  top: 0;
+  filter: blur(2.4px);
 }
 @media (max-width: 1000px) {
   .cloud { display: none; }
