@@ -601,7 +601,7 @@ body.is-scrolled .nav {
   -webkit-backdrop-filter: blur(20px) saturate(150%);
 }
 .contact__title {
-  margin: 10px 0 0;
+  margin: 0;
   font-size: clamp(24px, 3.4vw, 34px);
   font-weight: 600;
   letter-spacing: -0.03em;
