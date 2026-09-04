@@ -177,33 +177,12 @@ body.is-scrolled .nav {
 .nav__inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* The corner is deliberately empty — no wordmark, no mark. That leaves the
+     links as the bar's only child, and space-between would pin them left. */
+  justify-content: flex-end;
   gap: 20px;
   height: 62px;
 }
-
-/* Just the mark — no wordmark. The name belongs to the hero, and repeating
-   it in the corner is the kind of thing that made the old build feel busy. */
-.nav__mark {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  margin-left: -8px;
-  border-radius: 999px;
-  text-decoration: none;
-  transition: background var(--fast);
-}
-.nav__mark i {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  background: var(--accent);
-  box-shadow: 0 0 16px var(--accent);
-  transition: transform var(--fast);
-}
-.nav__mark:hover { background: var(--glass-2); }
-.nav__mark:hover i { transform: rotate(45deg); }
 
 .nav__links {
   display: flex;
