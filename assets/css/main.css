@@ -137,9 +137,6 @@ body {
 a { color: inherit; }
 
 .eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin: 0;
   font-family: var(--mono);
   font-size: 11.5px;
@@ -147,13 +144,6 @@ a { color: inherit; }
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--muted-2);
-}
-.eyebrow::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  flex: none;
-  background: var(--accent);
 }
 
 /* ---------------- top bar ---------------- */
@@ -273,7 +263,7 @@ body.is-scrolled .nav {
 .hero .wrap { position: relative; z-index: 1; }
 
 .hero__title {
-  margin: 22px 0 0;
+  margin: 0;
   font-size: clamp(42px, 6.6vw, 86px);
   font-weight: 600;
   line-height: 1.02;
@@ -281,8 +271,11 @@ body.is-scrolled .nav {
   max-width: 15ch;
 }
 
+/* the location line, now sitting under the name rather than over it */
+.hero__where { margin-top: 20px; }
+
 .hero__lede {
-  margin: 26px 0 0;
+  margin: 24px 0 0;
   max-width: 46ch;
   font-size: clamp(16px, 1.35vw, 18.5px);
   line-height: 1.6;
