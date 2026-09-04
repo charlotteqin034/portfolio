@@ -1,11 +1,15 @@
 /* ------------------------------------------------------------------
-   bg.js — the slow wave field that lives behind the glass.
+   bg.js — the smoke field behind the glass.
 
-   Everything on the page that reads as "glass" is a panel with a
-   backdrop-filter over this canvas. If the canvas were static the glass
-   would look like a flat texture; the drift is what makes it read as a
-   material with something behind it. It is deliberately slow enough that
-   you notice it only if you stop and look.
+   Drifting pools of colour read as a lava lamp. Smoke needs noise that
+   folds back through itself, so this is value-noise fBm with one domain
+   warp: the field is sampled at a position that is itself displaced by
+   the field. That fold is what makes the wisps curl instead of blob.
+
+   It is drawn into a buffer about a tenth of the viewport's pixel count
+   and blurred back up by CSS. At that size the whole thing costs a few
+   hundred thousand noise samples a second, and nothing in it has an edge
+   sharp enough to miss the resolution.
    ------------------------------------------------------------------ */
 (function () {
   var canvas = document.getElementById('bgCanvas');
@@ -14,82 +18,102 @@
   var ctx = canvas.getContext('2d', { alpha: false });
   if (!ctx) return;
 
-  /* The field is drawn at a fifth of the real pixel count and scaled back up
-     by CSS. Nothing in it has a hard edge, so the upscale costs no visible
-     quality — and it keeps a full-viewport animation off the GPU's critical
-     path on a laptop. */
-  var SCALE = 0.22;
-  var FPS = 30;
-  var w = 0;
-  var h = 0;
+  var FPS = 20;
+  var OCTAVES = 3;
 
-  /* Four drifting pools of colour. Each rides its own pair of sine
-     frequencies, so the group never repeats on a period anyone will catch. */
-  var BLOBS = [
-    { rgb: '167,139,250', r: 0.62, ax: 0.30, ay: 0.16, fx: 0.021, fy: 0.017, px: 0.0, py: 1.1, a: 0.16 },
-    { rgb: '124, 92,232', r: 0.72, ax: 0.26, ay: 0.20, fx: 0.015, fy: 0.024, px: 2.2, py: 0.4, a: 0.13 },
-    { rgb: '206,132,255', r: 0.46, ax: 0.34, ay: 0.14, fx: 0.027, fy: 0.019, px: 4.1, py: 3.0, a: 0.10 },
-    { rgb: ' 82, 70,190', r: 0.84, ax: 0.20, ay: 0.22, fx: 0.012, fy: 0.014, px: 5.4, py: 1.8, a: 0.12 }
-  ];
+  /* Dark purple ground, muted violet smoke. The gap between them is the
+     whole palette — anything brighter stops being a background. */
+  var BASE = [10, 6, 22];
+  var WISP = [86, 72, 150];
 
-  /* Three ribbons crossing the lower half. They are what makes the motion read
-     as waves rather than as a lava lamp. */
-  var WAVES = [
-    { base: 0.60, amp: 0.055, k: 2.1, speed: 0.16, phase: 0.0, rgb: '146,108,255', a: 0.085 },
-    { base: 0.73, amp: 0.040, k: 3.0, speed: -0.11, phase: 1.7, rgb: '196,130,255', a: 0.055 },
-    { base: 0.87, amp: 0.030, k: 1.6, speed: 0.09, phase: 3.4, rgb: '104, 84,220', a: 0.075 }
-  ];
+  /* ---------------- value noise ---------------- */
+
+  /* Shuffled with a fixed seed so the field is identical on every load and
+     on every machine: it is part of the design, not a random each time. */
+  var PERM = new Uint8Array(512);
+  (function () {
+    var p = new Uint8Array(256);
+    var i, j, t;
+    for (i = 0; i < 256; i++) p[i] = i;
+    var s = 1337;
+    for (i = 255; i > 0; i--) {
+      s = (s * 1664525 + 1013904223) >>> 0;
+      j = (s / 4294967296) * (i + 1) | 0;
+      t = p[i]; p[i] = p[j]; p[j] = t;
+    }
+    for (i = 0; i < 512; i++) PERM[i] = p[i & 255];
+  })();
+
+  function noise(x, y) {
+    var xi = Math.floor(x), yi = Math.floor(y);
+    var xf = x - xi, yf = y - yi;
+    // quintic fade: smooth enough that the lattice never shows through
+    var u = xf * xf * xf * (xf * (xf * 6 - 15) + 10);
+    var v = yf * yf * yf * (yf * (yf * 6 - 15) + 10);
+    xi &= 255; yi &= 255;
+    var a = PERM[xi] + yi, b = PERM[xi + 1] + yi;
+    var aa = PERM[a] / 255, ba = PERM[b] / 255;
+    var ab = PERM[a + 1] / 255, bb = PERM[b + 1] / 255;
+    var x1 = aa + u * (ba - aa);
+    var x2 = ab + u * (bb - ab);
+    return x1 + v * (x2 - x1);
+  }
+
+  function fbm(x, y) {
+    var v = 0, a = 0.5, i;
+    for (i = 0; i < OCTAVES; i++) {
+      v += a * noise(x, y);
+      // 2.03 rather than an exact 2: doubling lines the octaves up on the same
+      // lattice points and stripes the field
+      x *= 2.03; y *= 2.03; a *= 0.5;
+    }
+    return v;
+  }
+
+  /* ---------------- render ---------------- */
+
+  var w = 0, h = 0, img = null, buf = null;
 
   function resize() {
-    w = Math.max(140, Math.round(window.innerWidth * SCALE));
-    h = Math.max(140, Math.round(window.innerHeight * SCALE));
+    w = Math.max(96, Math.min(240, Math.round(window.innerWidth * 0.11)));
+    h = Math.max(64, Math.round(w * (window.innerHeight / window.innerWidth)));
     canvas.width = w;
     canvas.height = h;
+    img = ctx.createImageData(w, h);
+    buf = img.data;
+    for (var i = 3; i < buf.length; i += 4) buf[i] = 255;   // opaque, once
   }
 
   function draw(t) {
-    ctx.fillStyle = '#090514';
-    ctx.fillRect(0, 0, w, h);
+    var scale = 2.6 / w;          // ~2.6 noise cells across, whatever the width
+    var i = 0;
 
-    /* Additive, so where two pools overlap the colour lifts instead of one
-       painting over the other — the same way light pools do. */
-    ctx.globalCompositeOperation = 'lighter';
+    for (var py = 0; py < h; py++) {
+      var ny = py * scale;
+      /* Vertical falloff: the top of the page carries the headline, and smoke
+         behind type is just a contrast problem. It gathers toward the bottom. */
+      var band = 0.30 + 0.70 * (py / h);
+      for (var px = 0; px < w; px++) {
+        var nx = px * scale;
 
-    var span = Math.sqrt(w * w + h * h) * 0.5;
-    var i;
+        // the warp: sample the field at a point the field itself displaces
+        var q = fbm(nx + t * 0.012, ny - t * 0.008);
+        var f = fbm(nx + 2.4 * q, ny + 2.4 * q + t * 0.010);
 
-    for (i = 0; i < BLOBS.length; i++) {
-      var b = BLOBS[i];
-      var x = (0.5 + b.ax * Math.sin(t * b.fx + b.px)) * w;
-      var y = (0.5 + b.ay * Math.sin(t * b.fy + b.py)) * h;
-      var r = b.r * span;
-      var g = ctx.createRadialGradient(x, y, 0, x, y, r);
-      g.addColorStop(0, 'rgba(' + b.rgb + ',' + b.a + ')');
-      g.addColorStop(1, 'rgba(' + b.rgb + ',0)');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, w, h);
-    }
+        /* Cubed, off a high threshold. Squared off a low one lit most of the
+           frame and the "background" became a lavender wash — the wisps only
+           read as smoke if the space between them is genuinely dark. */
+        var n = (f - 0.36) * 2.3;
+        if (n < 0) n = 0; else if (n > 1) n = 1;
+        n = n * n * n * band;
 
-    var step = Math.max(2, w / 64);
-    for (i = 0; i < WAVES.length; i++) {
-      var v = WAVES[i];
-      var top = (v.base - v.amp) * h;
-      ctx.beginPath();
-      ctx.moveTo(0, h);
-      for (var x2 = 0; x2 <= w + step; x2 += step) {
-        var yy = (v.base + v.amp * Math.sin((x2 / w) * v.k * Math.PI * 2 + t * v.speed + v.phase)) * h;
-        ctx.lineTo(x2, yy);
+        buf[i]     = BASE[0] + (WISP[0] - BASE[0]) * n;
+        buf[i + 1] = BASE[1] + (WISP[1] - BASE[1]) * n;
+        buf[i + 2] = BASE[2] + (WISP[2] - BASE[2]) * n;
+        i += 4;
       }
-      ctx.lineTo(w, h);
-      ctx.closePath();
-      var lg = ctx.createLinearGradient(0, top, 0, h);
-      lg.addColorStop(0, 'rgba(' + v.rgb + ',' + v.a + ')');
-      lg.addColorStop(1, 'rgba(' + v.rgb + ',0)');
-      ctx.fillStyle = lg;
-      ctx.fill();
     }
-
-    ctx.globalCompositeOperation = 'source-over';
+    ctx.putImageData(img, 0, 0);
   }
 
   resize();
@@ -112,12 +136,8 @@
     draw(now / 1000);
   }
 
-  function start() {
-    if (!raf) raf = window.requestAnimationFrame(loop);
-  }
-  function stop() {
-    if (raf) { window.cancelAnimationFrame(raf); raf = 0; }
-  }
+  function start() { if (!raf) raf = window.requestAnimationFrame(loop); }
+  function stop() { if (raf) { window.cancelAnimationFrame(raf); raf = 0; } }
 
   /* A background animation nobody is looking at is pure battery drain. */
   document.addEventListener('visibilitychange', function () {

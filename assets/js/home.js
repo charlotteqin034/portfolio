@@ -73,6 +73,53 @@
     count.textContent = U.pad2(window.PROJECTS.length) + ' projects';
   }
 
+  /* ---------------- the stack cloud ----------------
+
+     Every distinct tool across the six projects, scattered beside the
+     headline. Placement is seeded, not random: the field is part of the
+     layout, and a version that reshuffled on every load would be a
+     different page each visit. */
+
+  var cloud = document.getElementById('cloud');
+  if (cloud) {
+    var terms = [];
+    var seen = {};
+    window.PROJECTS.forEach(function (p) {
+      (p.stack || '').split(',').forEach(function (raw) {
+        var t = raw.trim();
+        var key = t.toLowerCase();
+        if (t && !seen[key]) { seen[key] = 1; terms.push(t); }
+      });
+    });
+
+    var seed = 20260904;
+    function rnd() {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      return seed / 4294967296;
+    }
+
+    /* Jittered grid rather than free placement. Purely random positions put
+       "Meta Quest 3" straight through "OpenAI API"; one term per cell, shaken
+       around inside it, keeps the scatter without the collisions. */
+    var COLS = 3;
+    var ROWS = Math.ceil(terms.length / COLS);
+
+    cloud.innerHTML = terms.map(function (t, n) {
+      /* z is depth: the near ones are bigger, brighter and sharp, the far
+         ones small, dim and slightly out of focus. */
+      var z = rnd();
+      var size = (9.5 + z * 6).toFixed(1);
+      var op = (0.10 + z * 0.40).toFixed(2);
+      var blur = ((1 - z) * 1.5).toFixed(2);
+      var col = n % COLS;
+      var row = (n / COLS) | 0;
+      var x = (((col + 0.18 + rnd() * 0.64) / COLS) * 100).toFixed(2);
+      var y = (((row + 0.15 + rnd() * 0.70) / ROWS) * 100).toFixed(2);
+      return '<span style="left:' + x + '%;top:' + y + '%;font-size:' + size +
+        'px;opacity:' + op + ';filter:blur(' + blur + 'px)">' + U.esc(t) + '</span>';
+    }).join('');
+  }
+
   /* ---------------- reveal on scroll ---------------- */
 
   var cards = [].slice.call(grid.querySelectorAll('.card'));

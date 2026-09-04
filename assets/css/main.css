@@ -27,11 +27,12 @@
   --accent: #a78bfa;
   --accent-soft: rgba(167, 139, 250, 0.16);
 
-  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --r-sm: 10px;
-  --r: 14px;
-  --r-lg: 20px;
+  --r-sm: 8px;
+  --r: 12px;
+  --r-lg: 16px;
 
   --gutter: clamp(20px, 5vw, 56px);
   --maxw: 1180px;
@@ -84,8 +85,8 @@ body {
   height: 100%;
   /* The canvas is rendered at a fifth of the pixel count; scaling it past the
      viewport keeps the blur from feathering the edges into the page ground. */
-  transform: scale(1.2);
-  filter: blur(22px) saturate(130%);
+  transform: scale(1.08);
+  filter: blur(13px) saturate(118%);
 }
 
 /* Fine grain over the whole page. Gradients this large band visibly on an
@@ -136,12 +137,23 @@ body {
 a { color: inherit; }
 
 .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 0;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--muted-2);
+}
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  flex: none;
+  background: var(--accent);
 }
 
 /* ---------------- top bar ---------------- */
@@ -170,25 +182,28 @@ body.is-scrolled .nav {
   height: 62px;
 }
 
+/* Just the mark — no wordmark. The name belongs to the hero, and repeating
+   it in the corner is the kind of thing that made the old build feel busy. */
 .nav__mark {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-left: -8px;
+  border-radius: 999px;
   text-decoration: none;
-  color: var(--text);
+  transition: background var(--fast);
 }
 .nav__mark i {
-  width: 9px;
-  height: 9px;
-  border-radius: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
   background: var(--accent);
-  box-shadow: 0 0 14px var(--accent);
+  box-shadow: 0 0 16px var(--accent);
   transition: transform var(--fast);
 }
-.nav__mark:hover i { transform: scale(1.35) rotate(45deg); }
+.nav__mark:hover { background: var(--glass-2); }
+.nav__mark:hover i { transform: rotate(45deg); }
 
 .nav__links {
   display: flex;
@@ -238,14 +253,14 @@ body.is-scrolled .nav {
   gap: 9px;
   height: 44px;
   padding: 0 20px;
-  border: 1px solid var(--stroke);
-  border-radius: 999px;
+  border: 1px solid var(--stroke-2);
+  border-radius: var(--r-sm);
   background: var(--glass);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
@@ -260,44 +275,38 @@ body.is-scrolled .nav {
 .btn:active { transform: translateY(0); }
 
 .btn--primary {
-  background: var(--accent);
+  background: #f4f1fb;
   border-color: transparent;
-  color: #17102b;
+  color: #120c22;
   font-weight: 600;
 }
 .btn--primary:hover {
-  background: #b9a2ff;
+  background: #fff;
   border-color: transparent;
 }
 
 /* ---------------- hero ---------------- */
 
 .hero {
-  padding: clamp(72px, 15vh, 150px) 0 clamp(56px, 10vh, 110px);
+  position: relative;
+  padding: clamp(84px, 17vh, 168px) 0 clamp(64px, 11vh, 120px);
 }
+.hero .wrap { position: relative; z-index: 1; }
 
 .hero__title {
-  margin: 18px 0 0;
-  font-size: clamp(40px, 7.2vw, 76px);
+  margin: 22px 0 0;
+  font-size: clamp(42px, 6.6vw, 86px);
   font-weight: 600;
-  line-height: 1.04;
+  line-height: 1.02;
   letter-spacing: -0.035em;
-  max-width: 16ch;
-}
-.hero__title em {
-  font-style: normal;
-  /* the one place colour is allowed to carry meaning on the home page */
-  background: linear-gradient(100deg, var(--accent), #e9a6ff 60%, #8fd7ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  max-width: 15ch;
 }
 
 .hero__lede {
-  margin: 22px 0 0;
-  max-width: 46ch;
-  font-size: clamp(16px, 1.5vw, 18px);
-  line-height: 1.65;
+  margin: 26px 0 0;
+  max-width: 42ch;
+  font-size: clamp(16px, 1.35vw, 18.5px);
+  line-height: 1.6;
   color: var(--muted);
 }
 
@@ -305,7 +314,40 @@ body.is-scrolled .nav {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 34px;
+  margin-top: 38px;
+}
+
+/* ---------------- the stack cloud ----------------
+
+   The reference scatters its design tokens beside the headline. The same
+   move, with the actual tools out of every project's stack: it fills the
+   right half with something true rather than decoration, and the depth
+   comes from size, opacity and a little blur on the far ones. */
+
+.cloud {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  /* fades out where it would otherwise collide with the headline column */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 30%, #000 88%, transparent);
+}
+.cloud span {
+  position: absolute;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  transform: translate(-50%, -50%);
+}
+@media (max-width: 1000px) {
+  .cloud { display: none; }
 }
 
 /* ---------------- section heads ---------------- */
@@ -330,8 +372,9 @@ body.is-scrolled .nav {
   letter-spacing: -0.028em;
 }
 .section__note {
-  font-size: 13px;
-  font-weight: 500;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
   color: var(--muted-2);
   white-space: nowrap;
 }
@@ -479,16 +522,19 @@ body.is-scrolled .nav {
   padding: 20px 22px 22px;
 }
 
+/* Numbers and labels go mono, like the eyebrow. It is the only second voice
+   in the type system and it is reserved for the machine-ish bits. */
 .card__meta {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
-  font-weight: 500;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
   color: var(--muted-2);
 }
 .card__meta b {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--accent);
 }
 .card__meta s {
