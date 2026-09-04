@@ -283,11 +283,13 @@ body.is-scrolled .nav {
 
 .hero__lede {
   margin: 26px 0 0;
-  max-width: 42ch;
+  max-width: 46ch;
   font-size: clamp(16px, 1.35vw, 18.5px);
   line-height: 1.6;
   color: var(--muted);
 }
+.hero__lede p { margin: 0; }
+.hero__lede p + p { margin-top: 15px; }
 
 .hero__actions {
   display: flex;
