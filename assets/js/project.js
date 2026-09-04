@@ -38,13 +38,15 @@
   var meta = document.querySelector('meta[name="description"]');
   if (meta) meta.setAttribute('content', p.blurb || '');
 
+  document.documentElement.style.setProperty('--accent', p.accent || '#a78bfa');
+
   function fact(label, value) {
     if (!value) return '';
     return '<div class="proj__fact"><dt>' + U.esc(label) + '</dt><dd>' + U.esc(value) + '</dd></div>';
   }
 
   var kind = U.kindLabel(p);
-  var tags = (kind ? '<span class="proj__tag proj__tag--kind">' + U.esc(kind) + '</span>' : '') +
+  var tags = (kind ? '<span class="proj__tag proj__tag--kind"><i></i>' + U.esc(kind) + '</span>' : '') +
     (p.tags || []).map(function (t) {
       return '<span class="proj__tag">' + U.esc(t) + '</span>';
     }).join('');

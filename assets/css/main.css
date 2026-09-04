@@ -1,44 +1,52 @@
 /* ============================================================
    portfolio — shared shell + homepage
-
-   Paper, ink and hairlines. Everything that separates one thing
-   from another is a 1px rule, not a shadow, a fill or a radius —
-   the only filled colour on the page is the seal.
+   Dark purple, glass panels over a drifting wave field, one
+   typeface, one stroke weight.
    ============================================================ */
 
 :root {
-  /* paper */
-  --ground: #ddd8cb;      /* the mat the panels sit on */
-  --paper: #f5f2ea;       /* a panel */
-  --paper-2: #ebe4d2;     /* the warmer cream, for a feature band */
+  /* ground */
+  --bg: #0b0718;
+  --bg-deep: #080513;
+
+  /* glass: everything that looks like a panel is one of these three over
+     the wave field, never a solid fill */
+  --glass: rgba(255, 255, 255, 0.045);
+  --glass-2: rgba(255, 255, 255, 0.075);
+  --glass-3: rgba(255, 255, 255, 0.11);
+  --panel: rgba(13, 8, 28, 0.58);
+  --panel-2: rgba(17, 11, 36, 0.72);
+  --stroke: rgba(255, 255, 255, 0.10);
+  --stroke-2: rgba(255, 255, 255, 0.17);
 
   /* ink */
-  --ink: #1d1b17;
-  --ink-2: #55504a;
-  --ink-3: #8b8577;
+  --text: #f4f1fb;
+  --muted: #b0a6cd;
+  --muted-2: #7e749b;
 
-  /* hairlines */
-  --rule: #c6c0b0;
-  --rule-2: #a9a294;
+  --accent: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.16);
 
-  /* the one filled colour on the page */
-  --seal: #9c3b2e;
+  --sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --display: 'Cormorant Garamond', 'Times New Roman', Times, serif;
-  --body: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --r-sm: 8px;
+  --r: 12px;
+  --r-lg: 16px;
 
-  --gutter: clamp(20px, 5vw, 64px);
-  --maxw: 1240px;
+  --gutter: clamp(20px, 5vw, 56px);
+  --maxw: 1180px;
 
+  /* one easing for everything that moves under a pointer */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --fast: 200ms var(--ease);
-  --slow: 520ms var(--ease);
+  --fast: 180ms var(--ease);
+  --slow: 420ms var(--ease);
 }
 
 * { box-sizing: border-box; }
 
 html {
-  background: var(--ground);
+  background: var(--bg-deep);
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
@@ -50,18 +58,19 @@ body {
   margin: 0;
   /* No background here on purpose. `html` owns the ground colour; a background
      on `body` is painted as an in-flow block box, which lands *above* the
-     negative-z ink wash and hides it completely. */
-  color: var(--ink);
-  font-family: var(--body);
-  font-size: 18px;
+     negative-z wave field and hides it completely. */
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.6;
+  letter-spacing: -0.006em;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---------------- the ink wash ---------------- */
+/* ---------------- the field behind the glass ---------------- */
 
 .bg {
   position: fixed;
@@ -74,21 +83,22 @@ body {
   display: block;
   width: 100%;
   height: 100%;
+  /* The canvas is rendered at a fifth of the pixel count; scaling it past the
+     viewport keeps the blur from feathering the edges into the page ground. */
   transform: scale(1.08);
-  filter: blur(15px);
+  filter: blur(13px) saturate(118%);
 }
 
-/* Paper fibre. Two turbulence octaves at a low frequency give long flecks
-   rather than TV static, which is what separates a sheet of handmade paper
-   from a noisy gradient. */
+/* Fine grain over the whole page. Gradients this large band visibly on an
+   8-bit panel; a little noise is what stops it, and it also gives the glass
+   something to actually be glassy about. */
 .grain {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.5;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6 0.9' numOctaves='2' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23p)' opacity='0.32'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* ---------------- primitives ---------------- */
@@ -111,54 +121,40 @@ body {
   border: 0;
 }
 
-.ico { width: 1em; height: 1em; flex: none; display: block; }
+.ico {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  display: block;
+}
 
 :focus-visible {
-  outline: 1px solid var(--seal);
-  outline-offset: 4px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 a { color: inherit; }
 
-/* The label voice: small caps, widely letterspaced, opened by a short rule.
-   It stands in for the poster's vertical hairline-and-caption column. */
 .eyebrow {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   margin: 0;
-  font-family: var(--body);
+  font-family: var(--mono);
   font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.3em;
+  font-weight: 400;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--muted-2);
 }
 .eyebrow::before {
   content: '';
-  width: 26px;
-  height: 1px;
+  width: 6px;
+  height: 6px;
   flex: none;
-  background: var(--rule-2);
+  background: var(--accent);
 }
-
-/* The seal. One filled mark of colour in the whole design. */
-.seal {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 3px;
-  background: var(--seal);
-  color: var(--paper);
-  font-family: var(--display);
-  font-size: 19px;
-  font-weight: 500;
-  line-height: 1;
-  text-decoration: none;
-  transition: transform var(--fast);
-}
-.seal span { transform: translateY(-1px); }
 
 /* ---------------- top bar ---------------- */
 
@@ -166,76 +162,87 @@ a { color: inherit; }
   position: sticky;
   top: 0;
   z-index: 40;
-  background: color-mix(in srgb, var(--ground) 88%, transparent);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(11, 7, 24, 0.55);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
   border-bottom: 1px solid transparent;
-  transition: border-color var(--fast);
+  transition: border-color var(--fast), background var(--fast);
 }
-body.is-scrolled .nav { border-bottom-color: var(--rule-2); }
+/* the rule only appears once there is something scrolled under it */
+body.is-scrolled .nav {
+  border-bottom-color: var(--stroke);
+  background: rgba(11, 7, 24, 0.72);
+}
 
 .nav__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  height: 74px;
+  height: 62px;
 }
 
-.nav__mark { text-decoration: none; }
-.nav__mark:hover .seal { transform: rotate(-3deg); }
+/* Just the mark — no wordmark. The name belongs to the hero, and repeating
+   it in the corner is the kind of thing that made the old build feel busy. */
+.nav__mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-left: -8px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background var(--fast);
+}
+.nav__mark i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 16px var(--accent);
+  transition: transform var(--fast);
+}
+.nav__mark:hover { background: var(--glass-2); }
+.nav__mark:hover i { transform: rotate(45deg); }
 
 .nav__links {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 4px;
 }
 .nav__link {
-  position: relative;
-  padding: 4px 0;
-  font-size: 12px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  font-size: 14px;
   font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink-2);
+  color: var(--muted);
   text-decoration: none;
-  transition: color var(--fast);
+  transition: color var(--fast), background var(--fast);
 }
-/* the rule draws in from the left rather than just appearing */
-.nav__link::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 1px;
-  background: var(--ink);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--fast);
-}
-.nav__link:hover { color: var(--ink); }
-.nav__link:hover::after { transform: scaleX(1); }
+.nav__link:hover { color: var(--text); background: var(--glass-2); }
 
 .nav__icons {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding-left: 26px;
-  border-left: 1px solid var(--rule);
+  gap: 2px;
+  margin-left: 6px;
+  padding-left: 10px;
+  border-left: 1px solid var(--stroke);
 }
 .nav__ico {
   display: grid;
   place-items: center;
   width: 34px;
   height: 34px;
-  color: var(--ink-3);
-  transition: color var(--fast);
+  border-radius: 999px;
+  color: var(--muted);
+  transition: color var(--fast), background var(--fast);
 }
-.nav__ico .ico { width: 16px; height: 16px; }
-.nav__ico:hover { color: var(--ink); }
+.nav__ico .ico { width: 17px; height: 17px; }
+.nav__ico:hover { color: var(--text); background: var(--glass-2); }
 
-@media (max-width: 620px) {
+@media (max-width: 560px) {
   .nav__link { display: none; }
-  .nav__icons { border-left: 0; padding-left: 0; }
 }
 
 /* ---------------- buttons ---------------- */
@@ -243,142 +250,132 @@ body.is-scrolled .nav { border-bottom-color: var(--rule-2); }
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  height: 46px;
-  padding: 0 24px;
-  border: 1px solid var(--rule-2);
-  border-radius: 0;
-  background: transparent;
-  color: var(--ink);
-  font-family: var(--body);
-  font-size: 12px;
+  gap: 9px;
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--stroke-2);
+  border-radius: var(--r-sm);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14.5px;
   font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: background var(--fast), color var(--fast), border-color var(--fast);
+  transition: transform var(--fast), background var(--fast), border-color var(--fast);
 }
-.btn .ico { width: 14px; height: 14px; transition: transform var(--fast); }
+.btn .ico { width: 16px; height: 16px; }
 .btn:hover {
-  border-color: var(--ink);
-  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  transform: translateY(-2px);
+  background: var(--glass-2);
+  border-color: var(--stroke-2);
 }
-.btn:hover .ico { transform: translateX(3px); }
+.btn:active { transform: translateY(0); }
 
 .btn--primary {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--paper);
+  background: #f4f1fb;
+  border-color: transparent;
+  color: #120c22;
+  font-weight: 600;
 }
 .btn--primary:hover {
-  background: #000;
-  border-color: #000;
-  color: var(--paper);
+  background: #fff;
+  border-color: transparent;
 }
 
 /* ---------------- hero ---------------- */
 
 .hero {
-  padding: clamp(56px, 11vh, 110px) 0 clamp(56px, 10vh, 104px);
+  position: relative;
+  padding: clamp(84px, 17vh, 168px) 0 clamp(64px, 11vh, 120px);
 }
-
-/* Two columns split by a hairline, the way the poster splits its title from
-   its caption block. Below 860 the rule becomes a horizontal one. */
-.hero__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: clamp(30px, 5vw, 64px);
-  align-items: start;
-}
-@media (max-width: 860px) {
-  .hero__grid { grid-template-columns: 1fr; }
-}
+.hero .wrap { position: relative; z-index: 1; }
 
 .hero__title {
-  margin: 26px 0 0;
-  font-family: var(--display);
-  font-size: clamp(54px, 10vw, 128px);
-  font-weight: 300;
-  line-height: 0.94;
-  letter-spacing: -0.015em;
-}
-.hero__title em {
-  display: block;
-  font-style: italic;
-  font-weight: 300;
-  color: var(--ink-2);
-}
-
-.hero__side {
-  padding-left: clamp(24px, 4vw, 52px);
-  border-left: 1px solid var(--rule);
-}
-@media (max-width: 860px) {
-  .hero__side {
-    padding-left: 0;
-    padding-top: 30px;
-    border-left: 0;
-    border-top: 1px solid var(--rule);
-  }
+  margin: 22px 0 0;
+  font-size: clamp(42px, 6.6vw, 86px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  max-width: 15ch;
 }
 
 .hero__lede {
-  margin: 0;
-  max-width: 40ch;
-  font-size: 17.5px;
-  line-height: 1.75;
-  color: var(--ink-2);
+  margin: 26px 0 0;
+  max-width: 42ch;
+  font-size: clamp(16px, 1.35vw, 18.5px);
+  line-height: 1.6;
+  color: var(--muted);
 }
-
-/* Dates set as the poster sets them: stacked, slashed, hairline-separated. */
-.hero__meta {
-  margin: 30px 0 0;
-  padding-top: 22px;
-  border-top: 1px solid var(--rule);
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-.hero__meta div { display: flex; gap: 10px; }
-.hero__meta div + div { margin-top: 8px; }
-.hero__meta i { font-style: normal; color: var(--rule-2); }
-.hero__meta b { font-weight: 500; color: var(--ink); }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 34px;
+  gap: 12px;
+  margin-top: 38px;
+}
+
+/* ---------------- the stack cloud ----------------
+
+   The reference scatters its design tokens beside the headline. The same
+   move, with the actual tools out of every project's stack: it fills the
+   right half with something true rather than decoration, and the depth
+   comes from size, opacity and a little blur on the far ones. */
+
+.cloud {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  /* fades out where it would otherwise collide with the headline column */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 30%, #000 88%, transparent);
+}
+.cloud span {
+  position: absolute;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  transform: translate(-50%, -50%);
+}
+@media (max-width: 1000px) {
+  .cloud { display: none; }
 }
 
 /* ---------------- section heads ---------------- */
 
-.section { padding: clamp(34px, 6vh, 68px) 0; }
+.section {
+  padding: clamp(40px, 7vh, 76px) 0;
+}
 
 .section__head {
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 24px;
-  padding-bottom: 20px;
-  margin-bottom: 34px;
-  border-bottom: 1px solid var(--rule-2);
+  gap: 20px;
+  padding-bottom: 22px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--stroke);
 }
 .section__title {
-  margin: 12px 0 0;
-  font-family: var(--display);
-  font-size: clamp(30px, 4.4vw, 50px);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.01em;
+  margin: 0;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 600;
+  letter-spacing: -0.028em;
 }
 .section__note {
+  font-family: var(--mono);
   font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+  letter-spacing: 0.06em;
+  color: var(--muted-2);
   white-space: nowrap;
 }
 
@@ -387,45 +384,58 @@ body.is-scrolled .nav { border-bottom-color: var(--rule-2); }
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 26px;
+  gap: 22px;
 }
 @media (max-width: 720px) {
   .grid { grid-template-columns: 1fr; }
 }
 
+/* Cards come in on scroll. It is the one bit of motion left on the page, and
+   it is a fade and 14 pixels — enough to feel alive, not enough to wait for. */
 .card {
   opacity: 0;
   transform: translateY(14px);
   transition: opacity var(--slow), transform var(--slow);
-  transition-delay: calc(var(--i, 0) * 60ms);
+  transition-delay: calc(var(--i, 0) * 55ms);
 }
 .card.is-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .card { opacity: 1; transform: none; transition: none; }
 }
 
-/* A panel of paper on the mat. No radius, no shadow — it is held down by its
-   hairline, the way every panel in the reference is. */
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--rule);
-  background: var(--paper);
+  overflow: hidden;
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-lg);
+  /* Dark glass, not white glass. A white tint over the brighter part of the
+     wave field turns the card milky and drops the text contrast with it; a
+     dark translucent base keeps the field visible through the panel and the
+     copy legible on top of it. */
+  background: var(--panel);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
   text-decoration: none;
   color: inherit;
+  /* two transitions on one property list so the reveal above still works */
   transition:
     opacity var(--slow),
     transform var(--slow),
     border-color var(--fast),
+    box-shadow var(--fast),
     background var(--fast);
 }
 .card:hover {
-  transform: translateY(-3px);
-  border-color: var(--rule-2);
-  background: #f8f6f0;
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: var(--panel-2);
+  box-shadow:
+    0 22px 50px -26px rgba(0, 0, 0, 0.85),
+    0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
 }
-.card.is-in:hover { transform: translateY(-3px); }
+.card.is-in:hover { transform: translateY(-4px); }
 
 .card--wide { grid-column: 1 / -1; }
 @media (min-width: 900px) {
@@ -438,10 +448,13 @@ body.is-scrolled .nav { border-bottom-color: var(--rule-2); }
   position: relative;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  margin: 14px 14px 0;
-  background: var(--paper-2);
+  background: linear-gradient(150deg, rgba(167, 139, 250, 0.09), rgba(0, 0, 0, 0.45));
+  border-bottom: 1px solid var(--stroke);
 }
-.card--wide .card__media { margin: 14px 0 14px 14px; }
+.card--wide .card__media {
+  border-bottom: 0;
+  border-right: 1px solid var(--stroke);
+}
 .card__media img,
 .card__media svg {
   width: 100%;
@@ -456,11 +469,13 @@ body.is-scrolled .nav { border-bottom-color: var(--rule-2); }
 .card__media img.is-top { object-position: center top; }
 .card__media img.is-bottom { object-position: center bottom; }
 .card__media img.is-center { object-position: center center; }
-.card:hover .card__media img { transform: scale(1.03); }
+.card:hover .card__media img { transform: scale(1.035); }
 
+/* A tall screenshot in a landscape frame: show all of it, standing on the
+   gradient, rather than cropping the app down to a stripe. */
 .card__media--tall {
   display: grid;
-  place-items: end center;
+  place-items: center;
   padding: 16px 16px 0;
 }
 .card__media--tall img {
@@ -469,130 +484,151 @@ body.is-scrolled .nav { border-bottom-color: var(--rule-2); }
   height: 100%;
   object-fit: contain;
   object-position: bottom;
-  border: 1px solid var(--rule);
+  border-radius: 8px 8px 0 0;
+  border: 1px solid var(--stroke-2);
   border-bottom: 0;
+  box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.9);
+}
+
+/* the one chip that means the same thing on every card */
+.card__kind {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--stroke-2);
+  background: rgba(10, 6, 22, 0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+.card__kind i {
+  display: inline-block;
+  width: 6px; height: 6px;
+  margin-right: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  vertical-align: 1px;
 }
 
 .card__body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 20px 22px 24px;
+  gap: 9px;
+  padding: 20px 22px 22px;
 }
 
-/* index and period, hairline between — the poster's slashed date block */
+/* Numbers and labels go mono, like the eyebrow. It is the only second voice
+   in the type system and it is reserved for the machine-ish bits. */
 .card__meta {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--muted-2);
 }
-.card__meta b { font-weight: 500; color: var(--seal); }
+.card__meta b {
+  font-weight: 500;
+  color: var(--accent);
+}
 .card__meta s {
-  flex: 1;
+  width: 12px;
   height: 1px;
-  background: var(--rule);
+  background: var(--stroke-2);
   text-decoration: none;
 }
 
 .card__title {
   margin: 0;
-  font-family: var(--display);
-  font-size: 31px;
-  font-weight: 400;
-  line-height: 1.12;
-  letter-spacing: -0.012em;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.25;
 }
 
 .card__blurb {
   margin: 0;
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
 }
 
-/* Tags read as one line of small caps separated by rules, not as pills. */
 .card__tags {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  margin-top: 4px;
-  padding-top: 14px;
-  border-top: 1px solid var(--rule);
-  font-size: 10.5px;
+  gap: 6px;
+  margin-top: 5px;
+}
+.card__tag {
+  padding: 4px 9px;
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  font-size: 11.5px;
   font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--muted-2);
 }
-/* Trailing separator, not a leading one: on a line that wraps, a leading
-   slash starts the next line, which reads as a typo. */
-.card__tag:not(:last-child)::after {
-  content: '/';
-  margin-left: 10px;
-  color: var(--rule-2);
-}
-
-/* the kind leads the tag line, in the seal's red, as it does on a project page */
-.card__tag--kind { color: var(--seal); }
 
 .card__go {
   position: absolute;
-  top: 28px;
-  right: 28px;
+  top: 16px;
+  right: 16px;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--rule-2);
-  background: var(--paper);
-  color: var(--ink);
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--stroke);
+  background: rgba(10, 6, 22, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text);
   opacity: 0;
-  transform: translate(-4px, 4px);
-  transition: opacity var(--fast), transform var(--fast), background var(--fast), color var(--fast);
+  transform: translateY(-4px);
+  transition: opacity var(--fast), transform var(--fast), background var(--fast);
 }
-.card__go .ico { width: 14px; height: 14px; }
+.card__go .ico { width: 15px; height: 15px; }
 .card:hover .card__go,
 .card:focus-visible .card__go {
   opacity: 1;
   transform: none;
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
+  background: var(--accent);
+  color: #17102b;
 }
 
 /* ---------------- contact / footer ---------------- */
 
-.contact { padding: clamp(40px, 8vh, 88px) 0 0; }
-
+.contact {
+  padding: clamp(48px, 9vh, 96px) 0;
+}
 .contact__panel {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  gap: 30px;
-  padding: clamp(30px, 5vw, 52px);
-  border: 1px solid var(--rule);
-  background: var(--paper-2);
+  gap: 26px;
+  padding: clamp(28px, 5vw, 44px);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-lg);
+  background: var(--panel);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
 }
 .contact__title {
-  margin: 14px 0 0;
-  font-family: var(--display);
-  font-size: clamp(32px, 4.6vw, 54px);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.015em;
+  margin: 10px 0 0;
+  font-size: clamp(24px, 3.4vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
 }
 .contact__actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .foot {
@@ -601,39 +637,48 @@ body.is-scrolled .nav { border-bottom-color: var(--rule-2); }
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  margin-top: 40px;
-  padding: 22px 0 44px;
-  border-top: 1px solid var(--rule);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+  padding: 26px 0 40px;
+  border-top: 1px solid var(--stroke);
+  font-size: 13px;
+  color: var(--muted-2);
 }
-.foot a { text-decoration: none; transition: color var(--fast); }
-.foot a:hover { color: var(--ink); }
+.foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  transition: color var(--fast);
+}
+.foot a:hover { color: var(--text); }
+.foot .ico { width: 14px; height: 14px; }
 
 /* ---------------- back-to-top ---------------- */
 
 .totop {
   position: fixed;
-  right: 26px;
-  bottom: 26px;
+  right: 22px;
+  bottom: 22px;
   z-index: 30;
   display: grid;
   place-items: center;
   width: 42px;
   height: 42px;
-  padding: 0;
-  border: 1px solid var(--rule-2);
-  border-radius: 0;
-  background: var(--paper);
-  color: var(--ink-2);
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  background: rgba(11, 7, 24, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--muted);
   cursor: pointer;
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(10px);
   pointer-events: none;
-  transition: opacity var(--fast), transform var(--fast), background var(--fast), color var(--fast);
+  transition: opacity var(--fast), transform var(--fast), color var(--fast), background var(--fast);
 }
-.totop .ico { width: 16px; height: 16px; transform: rotate(180deg); }
-body.is-scrolled .totop { opacity: 1; transform: none; pointer-events: auto; }
-.totop:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.totop .ico { width: 17px; height: 17px; transform: rotate(180deg); }
+body.is-scrolled .totop {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.totop:hover { color: var(--text); background: var(--glass-3); }

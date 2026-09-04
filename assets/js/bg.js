@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------
-   bg.js — the ink wash on the paper.
+   bg.js — the smoke field behind the glass.
 
    Drifting pools of colour read as a lava lamp. Smoke needs noise that
    folds back through itself, so this is value-noise fBm with one domain
@@ -21,11 +21,10 @@
   var FPS = 20;
   var OCTAVES = 3;
 
-  /* Paper, and the grey a wash of ink leaves in it. The two are only a few
-     steps apart on purpose: on paper the wash has to be something you notice
-     on the second look, not the first. */
-  var BASE = [221, 216, 203];
-  var WISP = [186, 180, 166];
+  /* Dark purple ground, muted violet smoke. The gap between them is the
+     whole palette — anything brighter stops being a background. */
+  var BASE = [10, 6, 22];
+  var WISP = [86, 72, 150];
 
   /* ---------------- value noise ---------------- */
 
@@ -91,9 +90,9 @@
 
     for (var py = 0; py < h; py++) {
       var ny = py * scale;
-      /* Vertical falloff: the top of the page carries the headline, and a wash
+      /* Vertical falloff: the top of the page carries the headline, and smoke
          behind type is just a contrast problem. It gathers toward the bottom. */
-      var band = 0.22 + 0.78 * (py / h);
+      var band = 0.30 + 0.70 * (py / h);
       for (var px = 0; px < w; px++) {
         var nx = px * scale;
 
@@ -101,9 +100,10 @@
         var q = fbm(nx + t * 0.012, ny - t * 0.008);
         var f = fbm(nx + 2.4 * q, ny + 2.4 * q + t * 0.010);
 
-        /* Cubed, off a high threshold: the wash only reads as brushwork if
-           most of the sheet is left clean. */
-        var n = (f - 0.34) * 2.3;
+        /* Cubed, off a high threshold. Squared off a low one lit most of the
+           frame and the "background" became a lavender wash — the wisps only
+           read as smoke if the space between them is genuinely dark. */
+        var n = (f - 0.36) * 2.3;
         if (n < 0) n = 0; else if (n > 1) n = 1;
         n = n * n * n * band;
 
