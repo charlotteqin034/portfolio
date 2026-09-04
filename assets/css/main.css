@@ -271,11 +271,8 @@ body.is-scrolled .nav {
   max-width: 15ch;
 }
 
-/* the location line, now sitting under the name rather than over it */
-.hero__where { margin-top: 20px; }
-
 .hero__lede {
-  margin: 24px 0 0;
+  margin: 28px 0 0;
   max-width: 46ch;
   font-size: clamp(16px, 1.35vw, 18.5px);
   line-height: 1.6;
