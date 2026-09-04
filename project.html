@@ -5,46 +5,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Project — Charlotte</title>
 <meta name="description" content="">
-<link rel="stylesheet" href="assets/fonts/fonts.css?v=934f7644">
-<link rel="stylesheet" href="assets/css/main.css?v=1a23bb75">
-<link rel="stylesheet" href="assets/css/project.css?v=0e734847">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%2307040e'/><rect x='3' y='3' width='6' height='6' fill='%23ff5ea8'/><rect x='8' y='8' width='5' height='5' fill='none' stroke='%23fff' stroke-width='1.5'/></svg>">
+<link rel="stylesheet" href="assets/fonts/inter.css?v=835add75">
+<link rel="stylesheet" href="assets/css/main.css?v=ed87e22a">
+<link rel="stylesheet" href="assets/css/project.css?v=d8b5a169">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%230b0718'/><rect x='11' y='11' width='10' height='10' rx='3.5' fill='%23a78bfa'/></svg>">
 </head>
 <body>
 
+<div class="bg" aria-hidden="true"><canvas id="bgCanvas"></canvas></div>
 <div class="grain" aria-hidden="true"></div>
 
-<header class="topbar">
-  <div class="topbar__left">
-    <a class="mark" href="index.html" aria-label="Home"></a>
-    <button type="button" id="menuBtn" class="menu-btn" aria-expanded="false" aria-controls="sidebar">
-      <span class="menu-btn__bars" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="menu-btn__label">Menu</span>
-      <span class="sr-only">Open project index</span>
-    </button>
-  </div>
-  <div class="topbar__right">
-    <span class="topbar__place">Based in Los Angeles</span>
-    <span class="topbar__time" id="clock">--:--</span>
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html"><i aria-hidden="true"></i>Charlotte</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a class="nav__link" href="index.html#work">Work</a>
+      <a class="nav__link" href="index.html#contact">Contact</a>
+      <span class="nav__icons" data-social="nav__ico"></span>
+    </nav>
   </div>
 </header>
-
-<div class="sidebar-scrim" id="scrim"></div>
-<aside class="sidebar" id="sidebar" aria-hidden="true" aria-label="Project index"></aside>
 
 <main>
   <article class="proj" id="proj"></article>
 </main>
 
+<button type="button" class="totop" id="toTop" aria-label="Back to top">
+  <svg class="ico" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+       stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 5v14"/><path d="m5 13 7 7 7-7"/>
+  </svg>
+</button>
+
 <noscript>
-  <p style="padding:120px 6vw;font-family:'Courier New',monospace;color:#9a90b2">
+  <p style="padding:100px 6vw;color:#b0a6cd;font-family:Inter,system-ui,sans-serif">
     This page needs JavaScript to load its project. Head back to the
-    <a href="index.html" style="color:#b06bff">index</a>.
+    <a href="index.html" style="color:#a78bfa">gallery</a>.
   </p>
 </noscript>
 
-<script src="assets/js/site.js?v=9dc7db7d"></script>
-<script src="assets/js/project.js?v=4552c7f1"></script>
-<script src="assets/js/nav.js?v=6999527b"></script>
+<script src="assets/js/site.js?v=f836ef63"></script>
+<script src="assets/js/bg.js?v=4616d3cf"></script>
+<script src="assets/js/project.js?v=a0608520"></script>
+<script src="assets/js/nav.js?v=c3b03b05"></script>
 </body>
 </html>

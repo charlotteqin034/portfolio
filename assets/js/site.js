@@ -6,7 +6,7 @@
 window.SITE = {
   name: 'Charlotte',
 
-  // The footer and the sidebar both read these.
+  // The top bar and the footer both read these.
   // Leave a string empty and it renders as a muted "coming soon" placeholder.
   links: {
     linkedin: 'https://www.linkedin.com/in/charlotte-qin-96757320a/',
@@ -18,14 +18,14 @@ window.SITE = {
    live directly in index.html so they paint instantly — search for
    "EDIT ME" in that file. */
 
-/* Projects, in the order you walk past them. `slug` is what shows up
+/* Projects, in the order they appear in the gallery. `slug` is what shows up
    in the URL (project.html?p=slug). `shortTitle` is optional — set it when the
    real name is too long for a card, and it replaces `title` on the card, the
-   page headline and the prev/next boxes. `wide: true` renders the full-width,
-   no-thumbnail card variant.
+   page headline and the prev/next boxes. `wide: true` gives the card a full-width
+   row of its own in the gallery grid.
 
    Media is optional and lives in assets/media/<slug>/. `cover` is the image
-   that stands for the project on its corridor card; it also leads the gallery
+   that stands for the project on its gallery card; it also leads the gallery
    on the detail page, where `media` follows it. Every entry — cover included —
    is a path or { src, caption, poster, frame, fit, focus }. frame: 'phone'
    puts a tall screenshot inside the site's phone mockup instead of a full-bleed
@@ -280,7 +280,7 @@ window.SiteUtil = (function () {
     };
   }
 
-  /* The name a project goes by in tight spaces — the corridor card, the page
+  /* The name a project goes by in tight spaces — the gallery card, the page
      headline, the prev/next boxes. Everything is set in a monospaced pixel
      face, so a long formal name eats three or four lines there. The full
      `title` still owns the browser tab and the detail page. */
@@ -288,9 +288,43 @@ window.SiteUtil = (function () {
     return project.shortTitle || project.title;
   }
 
+  /* A small stroke icon set, inline so there is no icon font to fetch and every
+     glyph inherits currentColor and its surrounding size. All of them are drawn
+     on the same 24px grid at the same 1.6 stroke weight, which is the whole
+     reason they read as one family rather than as clip art. */
+  var ICONS = {
+    arrowUpRight: '<path d="M7 17 17 7"/><path d="M9 7h8v8"/>',
+    arrowLeft: '<path d="M19 12H5"/><path d="m11 5-7 7 7 7"/>',
+    arrowRight: '<path d="M5 12h14"/><path d="m13 5 7 7-7 7"/>',
+    arrowDown: '<path d="M12 5v14"/><path d="m5 13 7 7 7-7"/>',
+    chevronLeft: '<path d="m15 5-7 7 7 7"/>',
+    chevronRight: '<path d="m9 5 7 7-7 7"/>',
+    play: '<path d="M8 5.2v13.6L19 12z"/>'
+  };
+
+  /* The two brand marks are filled silhouettes, not strokes — that is simply
+     how the logos are drawn, and redrawing them as outlines would make them
+     wrong rather than consistent. */
+  var BRAND = {
+    github: 'M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.2 4.9 18.2 5.2 18.2 5.2c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3z',
+    linkedin: 'M20.4 20.5h-3.6V15c0-1.3 0-3-1.9-3-1.8 0-2.1 1.4-2.1 2.9v5.6H9.4V9h3.4v1.6h.1c.5-.9 1.6-1.9 3.4-1.9 3.6 0 4.3 2.4 4.3 5.5v6.3zM5.3 7.4a2.1 2.1 0 1 1 0-4.1 2.1 2.1 0 0 1 0 4.1zm1.8 13.1H3.6V9h3.5v11.5zM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6C0 23.2.8 24 1.8 24h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0z'
+  };
+
+  function icon(name, extra) {
+    var cls = 'ico' + (extra ? ' ' + extra : '');
+    var head = '<svg class="' + cls + '" viewBox="0 0 24 24" width="24" height="24" ' +
+      'aria-hidden="true" focusable="false" ';
+    if (BRAND[name]) {
+      return head + 'fill="currentColor"><path d="' + BRAND[name] + '"/></svg>';
+    }
+    if (!ICONS[name]) return '';
+    return head + 'fill="none" stroke="currentColor" stroke-width="1.6" ' +
+      'stroke-linecap="round" stroke-linejoin="round">' + ICONS[name] + '</svg>';
+  }
+
   /* Hardware / software / both. It rides in its own filled chip ahead of the
      free-form tags: it is the one tag that means the same thing on every card,
-     so it is worth being able to scan down the corridor and read only that. */
+     so it is worth being able to scan down the gallery and read only that. */
   var KINDS = {
     hardware: 'hardware',
     software: 'software',
@@ -392,6 +426,6 @@ window.SiteUtil = (function () {
   }
 
   return { esc: esc, richText: richText, pad2: pad2, bySlug: bySlug, href: href,
-           shortName: shortName, kindLabel: kindLabel, media: media,
-           thumbSVG: thumbSVG };
+           shortName: shortName, kindLabel: kindLabel, icon: icon,
+           media: media, thumbSVG: thumbSVG };
 })();

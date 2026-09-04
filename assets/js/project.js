@@ -12,14 +12,18 @@
 
   var found = U.bySlug(slug);
 
+  var back =
+    '<a class="proj__back" href="index.html">' + U.icon('arrowLeft') + 'All work</a>';
+
   if (!found) {
     document.title = 'Not found — ' + window.SITE.name;
     root.innerHTML =
-      '<a class="proj__back" href="index.html"><span aria-hidden="true">&#8592;</span> Back to index</a>' +
-      '<div class="proj__missing">' +
-        '<h1 class="proj__title">Nothing here<b class="dot"></b></h1>' +
-        '<p>That project does not exist &mdash; it may have been renamed. ' +
-        'Everything that does exist is in the menu, top left.</p>' +
+      '<div class="wrap">' + back +
+        '<div class="proj__missing">' +
+          '<h1 class="proj__title">Nothing here</h1>' +
+          '<p>That project does not exist &mdash; it may have been renamed. ' +
+          'Everything that does exist is back on the <a href="index.html">gallery</a>.</p>' +
+        '</div>' +
       '</div>';
     return;
   }
@@ -34,32 +38,31 @@
   var meta = document.querySelector('meta[name="description"]');
   if (meta) meta.setAttribute('content', p.blurb || '');
 
-  var side = document.getElementById('sidebar');
-  if (side) side.setAttribute('data-active', p.slug);
-
-  document.documentElement.style.setProperty('--accent', p.accent || '#b06bff');
+  document.documentElement.style.setProperty('--accent', p.accent || '#a78bfa');
 
   function fact(label, value) {
     if (!value) return '';
-    return '<div><dt>' + U.esc(label) + '</dt><dd>' + U.esc(value) + '</dd></div>';
+    return '<div class="proj__fact"><dt>' + U.esc(label) + '</dt><dd>' + U.esc(value) + '</dd></div>';
   }
 
-  var tags = (p.tags || []).map(function (t) {
-    return '<span>' + U.esc(t) + '</span>';
-  }).join('');
+  var kind = U.kindLabel(p);
+  var tags = (kind ? '<span class="proj__tag proj__tag--kind"><i></i>' + U.esc(kind) + '</span>' : '') +
+    (p.tags || []).map(function (t) {
+      return '<span class="proj__tag">' + U.esc(t) + '</span>';
+    }).join('');
 
   var body = (p.body || []).map(function (par) {
     return '<p>' + U.richText(par) + '</p>';
   }).join('');
 
   var links = (p.links || []).map(function (l) {
-    return '<a class="proj__link" href="' + U.esc(l.url) + '" target="_blank" rel="noopener">' +
-      U.esc(l.label) + '<span class="ico" aria-hidden="true">&#8599;</span></a>';
+    return '<a class="btn" href="' + U.esc(l.url) + '" target="_blank" rel="noopener">' +
+      U.esc(l.label) + U.icon('arrowUpRight') + '</a>';
   }).join('');
 
   /* Everything the project has to show lives in one gallery: the cover leads
      it, the rest follow in order. The cover keeps its own field because the
-     corridor card needs to know which image represents the project. */
+     gallery card needs to know which image represents the project. */
   var shots = (p.cover && !p.coverCardOnly ? [p.cover] : []).concat(p.media || []);
 
   var items = shots.map(U.media).filter(function (m) { return m.src; });
@@ -78,9 +81,7 @@
       ? '<video src="' + U.esc(m.src) + '" controls playsinline preload="metadata"' +
         (m.poster ? ' poster="' + U.esc(m.poster) + '"' : '') + '></video>'
       : '<img src="' + U.esc(m.src) + '" alt="' + U.esc(m.caption) + '" loading="lazy">';
-    return m.frame === 'phone'
-      ? '<div class="phone"><div class="phone__screen">' + el + '</div></div>'
-      : el;
+    return m.frame === 'phone' ? '<div class="shot__tall">' + el + '</div>' : el;
   }
 
   function gridHTML() {
@@ -111,16 +112,17 @@
     }).join('');
 
     return '<div class="gal" data-gallery aria-roledescription="carousel">' +
-      '<div class="gal__stage">' + slides + '</div>' +
-      '<div class="gal__bar">' +
+      '<div class="gal__stage">' + slides +
         '<button type="button" class="gal__nav gal__nav--prev" data-step="-1" ' +
-          'aria-label="Previous"><span aria-hidden="true"></span></button>' +
-        '<span class="gal__count">' + U.pad2(1) + ' / ' + U.pad2(items.length) + '</span>' +
-        '<div class="gal__dots">' + dots + '</div>' +
+          'aria-label="Previous">' + U.icon('chevronLeft') + '</button>' +
         '<button type="button" class="gal__nav gal__nav--next" data-step="1" ' +
-          'aria-label="Next"><span aria-hidden="true"></span></button>' +
+          'aria-label="Next">' + U.icon('chevronRight') + '</button>' +
       '</div>' +
-      '<p class="gal__caption">' + U.esc(items[0].caption) + '</p>' +
+      '<div class="gal__bar">' +
+        '<p class="gal__caption">' + U.esc(items[0].caption) + '</p>' +
+        '<div class="gal__dots">' + dots + '</div>' +
+        '<span class="gal__count">' + U.pad2(1) + ' / ' + U.pad2(items.length) + '</span>' +
+      '</div>' +
     '</div>';
   }
 
@@ -132,44 +134,56 @@
   }).join('');
 
   root.innerHTML =
-    '<a class="proj__back" href="index.html"><span aria-hidden="true">&#8592;</span> Back to index</a>' +
+    '<div class="wrap">' +
 
-    '<header class="proj__head">' +
-      '<span class="proj__index">' + U.pad2(i + 1) + ' / ' + U.esc(p.period || '') + '</span>' +
-      '<h1 class="proj__title">' + U.esc(U.shortName(p)) + '<b class="dot"></b></h1>' +
-      (p.shortTitle && p.shortTitle !== p.title
-        ? '<p class="proj__fullname">' + U.esc(p.title) + '</p>' : '') +
-      '<p class="proj__lede">' + U.esc(p.blurb) + '</p>' +
-      (tags ? '<div class="proj__tags">' + tags + '</div>' : '') +
-    '</header>' +
+      back +
 
-    (gallery
-      ? gallery
-      : '<div class="proj__screen">' +
-          '<div class="phone"><div class="phone__screen">' + U.thumbSVG(p, i) + '</div></div>' +
-        '</div>') +
+      '<header class="proj__head">' +
+        '<p class="eyebrow">' + U.pad2(i + 1) + ' &middot; ' + U.esc(p.period || '') + '</p>' +
+        '<h1 class="proj__title">' + U.esc(U.shortName(p)) + '</h1>' +
+        (p.shortTitle && p.shortTitle !== p.title
+          ? '<p class="proj__fullname">' + U.esc(p.title) + '</p>' : '') +
+        '<p class="proj__lede">' + U.esc(p.blurb) + '</p>' +
+        (tags ? '<div class="proj__tags">' + tags + '</div>' : '') +
+      '</header>' +
 
-    '<dl class="proj__facts">' +
-      fact('Period', p.period) +
-      fact('Role', p.role) +
-      fact('Team', p.team) +
-      fact('Stack', p.stack) +
-    '</dl>' +
+      (gallery
+        ? gallery
+        : '<div class="proj__shot proj__shot--wide">' + U.thumbSVG(p, i) + '</div>') +
 
-    (links ? '<div class="proj__links">' + links + '</div>' : '') +
+      '<div class="proj__cols">' +
+        '<div class="proj__main">' +
+          (body ? '<div class="proj__body">' + body + '</div>' : '') +
+          (highlights
+            ? '<h2 class="proj__sub">Highlights</h2>' +
+              '<ul class="proj__highlights">' + highlights + '</ul>'
+            : '') +
+        '</div>' +
+        '<aside class="proj__side">' +
+          '<dl class="proj__facts">' +
+            fact('Period', p.period) +
+            fact('Role', p.role) +
+            fact('Team', p.team) +
+            fact('Stack', p.stack) +
+          '</dl>' +
+          (links ? '<div class="proj__links">' + links + '</div>' : '') +
+        '</aside>' +
+      '</div>' +
 
-    (body ? '<div class="proj__body">' + body + '</div>' : '') +
+      '<nav class="proj__nav" aria-label="More projects">' +
+        '<a class="proj__step" href="' + U.href(prev) + '">' +
+          U.icon('arrowLeft') +
+          '<span><span class="lbl">Previous</span>' +
+          '<span class="nm">' + U.esc(U.shortName(prev)) + '</span></span>' +
+        '</a>' +
+        '<a class="proj__step proj__step--next" href="' + U.href(next) + '">' +
+          '<span><span class="lbl">Next</span>' +
+          '<span class="nm">' + U.esc(U.shortName(next)) + '</span></span>' +
+          U.icon('arrowRight') +
+        '</a>' +
+      '</nav>' +
 
-    (highlights
-      ? '<h2 class="proj__sub">Highlights</h2><ul class="proj__highlights">' + highlights + '</ul>'
-      : '') +
-
-    '<nav class="proj__nav" aria-label="More projects">' +
-      '<a href="' + U.href(prev) + '"><span class="lbl">Previous</span>' +
-        '<span class="nm">' + U.esc(U.shortName(prev)) + '</span></a>' +
-      '<a href="' + U.href(next) + '"><span class="lbl">Next</span>' +
-        '<span class="nm">' + U.esc(U.shortName(next)) + '</span></a>' +
-    '</nav>';
+    '</div>';
 
   wireCarousel(root.querySelector('[data-gallery]'));
 
