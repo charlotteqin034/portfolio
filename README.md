@@ -2,12 +2,15 @@
 
 A rebuild of the corridor portfolio with a simpler, cleaner interface.
 
-- **Dark purple glass.** Every panel is a translucent dark surface with a
-  `backdrop-filter` over a canvas wave field (`assets/js/bg.js`), which drifts
-  slowly so the glass has something behind it.
-- **No parallax.** The 3D scroll corridor is gone; projects are a plain
-  responsive grid that reveals on scroll.
-- **One typeface.** Self-hosted Inter, latin + latin-ext only.
+- **Paper, ink and hairlines.** Everything that separates one thing from
+  another is a 1px rule, not a shadow, a fill or a radius. The only filled
+  colour on the page is the seal.
+- **An ink wash under the paper.** `assets/js/bg.js` draws value-noise fBm with
+  one domain warp, in two greys a few steps apart, so it reads on the second
+  look rather than the first.
+- **No parallax.** Projects are a plain responsive grid that reveals on scroll.
+- **Two serifs.** Cormorant Garamond for display, EB Garamond for text, both
+  self-hosted, latin + latin-ext only.
 - **One icon family.** Inline SVG on a 24px grid at 1.6 stroke, in
   `SiteUtil.icon()` — no icon font.
 

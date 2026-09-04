@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Charlotte — Portfolio</title>
 <meta name="description" content="Portfolio of Charlotte — selected projects across VR, hardware and the web.">
-<link rel="stylesheet" href="assets/fonts/outfit.css?v=5f2df465">
-<link rel="stylesheet" href="assets/fonts/plex-mono.css?v=8a9d555f">
-<link rel="stylesheet" href="assets/css/main.css?v=7e214d08">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%230b0718'/><rect x='11' y='11' width='10' height='10' rx='3.5' fill='%23a78bfa'/></svg>">
+<link rel="stylesheet" href="assets/fonts/cormorant.css?v=a9060cc5">
+<link rel="stylesheet" href="assets/fonts/eb-garamond.css?v=877c43c4">
+<link rel="stylesheet" href="assets/css/main.css?v=6b40281a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%23ddd8cb'/><rect x='11' y='11' width='10' height='10' rx='3.5' fill='%239c3b2e'/></svg>">
 </head>
 <body>
 
@@ -17,7 +17,7 @@
 
 <header class="nav">
   <div class="wrap nav__inner">
-    <a class="nav__mark" href="index.html" aria-label="Home"><i aria-hidden="true"></i></a>
+    <a class="nav__mark" href="index.html" aria-label="Home"><span class="seal"><span>C</span></span></a>
     <nav class="nav__links" aria-label="Sections">
       <a class="nav__link" href="#work">Work</a>
       <a class="nav__link" href="#contact">Contact</a>
@@ -30,21 +30,31 @@
 
   <!-- ============ hero ============ -->
   <section class="hero">
-    <!-- built from every project's stack, in home.js -->
-    <div class="cloud" id="cloud" aria-hidden="true"></div>
-    <div class="wrap">
-      <!-- EDIT ME: location line -->
-      <p class="eyebrow">Based in Los Angeles</p>
-      <!-- EDIT ME: hero headline -->
-      <h1 class="hero__title">Hi, I&rsquo;m Charlotte.</h1>
-      <!-- EDIT ME: the line under the headline -->
-      <p class="hero__lede">
-        Developer working across VR, hardware and the web &mdash; from biosignals
-        driving a live score to drone capture turned into a 3D previsualization tool.
-      </p>
-      <div class="hero__actions">
-        <a class="btn btn--primary" href="#work">View work</a>
-        <a class="btn" href="#" data-href="linkedin" target="_blank" rel="noopener">Get in touch</a>
+    <div class="wrap hero__grid">
+      <div>
+        <!-- EDIT ME: location line -->
+        <p class="eyebrow">Los Angeles</p>
+        <!-- EDIT ME: hero headline -->
+        <h1 class="hero__title">Charlotte<em>Qin</em></h1>
+      </div>
+
+      <div class="hero__side">
+        <!-- EDIT ME: the line under the headline -->
+        <p class="hero__lede">
+          Developer working across VR, hardware and the web &mdash; from
+          biosignals driving a live score to drone capture turned into a 3D
+          previsualization tool.
+        </p>
+
+        <div class="hero__meta">
+          <div><span>Practice</span><i>/</i><b>Interactive &amp; Physical</b></div>
+          <div><span>Selected</span><i>/</i><b>2025 &mdash; 2026</b></div>
+        </div>
+
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#work">Selected work</a>
+          <a class="btn" href="#" data-href="linkedin" target="_blank" rel="noopener">Get in touch</a>
+        </div>
       </div>
     </div>
   </section>
@@ -90,15 +100,15 @@
 </button>
 
 <noscript>
-  <p style="padding:100px 6vw;color:#b0a6cd;font-family:Outfit,system-ui,sans-serif">
+  <p style="padding:100px 6vw;color:#b0a6cd;font-family:Georgia,serif">
     This portfolio builds its project gallery with JavaScript. Enable it, or
     reach me through the links in the footer.
   </p>
 </noscript>
 
 <script src="assets/js/site.js?v=f836ef63"></script>
-<script src="assets/js/bg.js?v=b1e003c8"></script>
-<script src="assets/js/home.js?v=24f9b24d"></script>
+<script src="assets/js/bg.js?v=2fbdab96"></script>
+<script src="assets/js/home.js?v=55a1055e"></script>
 <script src="assets/js/nav.js?v=c3b03b05"></script>
 </body>
 </html>
