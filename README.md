@@ -1,6 +1,6 @@
 # portfolio — revamp
 
-A rebuild of the corridor portfolio with a simpler, cleaner interface.
+A rebuild of my old portfolio with a simpler, cleaner interface.
 
 - **Dark purple glass.** Every panel is a translucent dark surface with a
   `backdrop-filter` over a canvas wave field (`assets/js/bg.js`), which drifts
@@ -39,8 +39,3 @@ python3 scratch/cdp_carousel.py <project url>       # real-mouse carousel test
 python3 scratch/cdp_shot.py <url> <out.png> --y 0.4 # screenshot at a scroll position
 ```
 
-## Relationship to the live site
-
-This is a copy of the portfolio at `../portfolio`, which is what is published at
-<https://charlotteqin034.github.io/portfolio/>. The git remote is deliberately
-removed here so nothing in this tree can overwrite the live site.
